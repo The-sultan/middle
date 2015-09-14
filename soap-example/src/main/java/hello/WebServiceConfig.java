@@ -19,8 +19,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
      * al nombrar el bean con "countries" esto hace que en ws/countries.wsdl se 
      * exponga el wsdl.
      * 
-     * Además, al setear targetNamespace se une esta definición con el 
-     * webservice en la clase CountryEndpoint pues tiene el mismo namespace.
      * @param countriesSchema
      * @return 
      */

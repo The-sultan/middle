@@ -10,6 +10,11 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 /**
  *
+ * NOTA: El lugar donde queda definido el web service se define los dos 
+ * parametros que estan en la annotation PayloadRoot
+ * 1) El namespace
+ * 2) LocalPart
+ * 
  * @author Farid
  */
 @Endpoint
