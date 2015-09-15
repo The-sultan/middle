@@ -11,5 +11,6 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 */target/*
-soap-example/src/main/java/io/spring/guides/gs_producing_web_service/*
 *nb-configuration.xml
+**/target/**
+**/java/io/spring/guides/gs_producing_web_service/
