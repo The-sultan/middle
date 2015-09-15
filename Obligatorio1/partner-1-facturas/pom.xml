@@ -6,10 +6,10 @@
 	<artifactId>partner-1-pagos</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>partner-1-pagos</name>
+	<name>partner-1-facturas</name>
 
 	<build>
-		<finalName>pagos</finalName>
+		<finalName>facturas</finalName>
 		<plugins>
 			<!-- Plugin para generar el war y que no falle por falta de web.xml-->
 			<plugin>

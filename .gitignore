@@ -14,3 +14,4 @@ hs_err_pid*
 *nb-configuration.xml
 **/target/**
 **/java/io/spring/guides/gs_producing_web_service/
+/Obligatorio1/partner-1-facturas/target/
