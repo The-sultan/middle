@@ -91,20 +91,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<!-- Jar file entry point -->
-							<addClasspath>true</addClasspath>
-							<mainClass>uy.edu.fing.inco.lins.PagoDemoApp</mainClass>
-							<classpathPrefix>dependency-jars/</classpathPrefix>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
@@ -124,6 +110,9 @@
 					<scanTargets>
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
+					<httpConnector>
+          	<port>8080</port>
+        	</httpConnector>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -144,36 +133,65 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- usage of jax-ws maven plugin-->
-        <plugin>
+        <!-- <plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
 					<artifactId>jaxws-maven-plugin</artifactId>
 					<version>2.3</version>
 					<executions>
 						<execution>
+							<id>MOM-stubs</id>
 							<goals>
 								<goal>wsimport</goal>
 							</goals>
+							<configuration>
+								<vmArgs>
+	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+	    					</vmArgs>
+	                    <wsdlDirectory>src/wsdl</wsdlDirectory>
+	                <wsdlFiles>
+	                    <wsdlFile>payment-service.wsdl</wsdlFile>
+	                </wsdlFiles>
+	                <keep>true</keep>
+	                <packageName>uy.edu.fing.inco.lins.generated</packageName>
+	                <sourceDestDir>src/main/java</sourceDestDir>
+	            </configuration>
+						</execution>
+						<execution>
+							<id>PartnerA-stubs</id>
+							<goals>
+								<goal>wsimport</goal>
+							</goals>
+							<configuration>
+								<vmArgs>
+	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+	    					</vmArgs>
+								<wsdlUrls>
+	                <wsdlUrl>http://localhost:8081/jaxws-spring?wsdl</wsdlUrl>
+	              </wsdlUrls>
+	                <keep>true</keep>
+	                <packageName>uy.edu.fing.inco.lins.generated.partnerfactura</packageName>
+	                <sourceDestDir>src/main/java</sourceDestDir>
+	            </configuration>
+						</execution>
+						<execution>
+							<id>PartnerB-stubs</id>
+							<goals>
+								<goal>wsimport</goal>
+							</goals>
+							<configuration>
+								<vmArgs>
+	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+	    					</vmArgs>
+								<wsdlUrls>
+									<wsdlUrl>http://localhost:8082/jaxws-spring?wsdl</wsdlUrl>
+	              </wsdlUrls>
+	                <keep>true</keep>
+	                <packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName>
+	                <sourceDestDir>src/main/java</sourceDestDir>
+	            </configuration>
 						</execution>
 					</executions>
-            <configuration>
-							<vmArgs>
-        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-    					</vmArgs>
-                <!-- or using wsdls file directory -->
-                    <wsdlDirectory>src/wsdl</wsdlDirectory>
-                <!-- which wsdl file -->
-                <wsdlFiles>
-                    <wsdlFile>payment-service.wsdl</wsdlFile>
-                </wsdlFiles>
-                <!-- Keep generated files -->
-                <keep>true</keep>
-                <!-- Package name -->
-                <packageName>uy.edu.fing.inco.lins.generated</packageName>
-                <!-- generated source files destination-->
-                <sourceDestDir>src/main/java</sourceDestDir>
-            </configuration>
-        </plugin>
+        </plugin> -->
 		</plugins>
 	</build>
 

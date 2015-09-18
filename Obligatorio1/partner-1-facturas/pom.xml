@@ -34,8 +34,11 @@
 					<scanTargets>
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
+					<httpConnector>
+						<port>8081</port>
+					</httpConnector>
 				</configuration>
-			</plugin> 
+			</plugin>
 			<!-- Plugin para crear automaticamente las clases definidas en el xsd -->
 			<!--
 			<plugin>

@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>partner-2-ventas</name>
-  
+
   <build>
 		<finalName>ventas</finalName>
 		<plugins>
@@ -32,8 +32,11 @@
 					<scanTargets>
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
+          <httpConnector>
+						<port>8082</port>
+					</httpConnector>
 				</configuration>
-			</plugin> 
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
