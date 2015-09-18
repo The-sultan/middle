@@ -133,7 +133,7 @@
 					</execution>
 				</executions>
 			</plugin>
-        <!-- <plugin>
+        <plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
 					<artifactId>jaxws-maven-plugin</artifactId>
 					<version>2.3</version>
@@ -156,7 +156,7 @@
 	                <sourceDestDir>src/main/java</sourceDestDir>
 	            </configuration>
 						</execution>
-						<execution>
+						<!-- <execution>
 							<id>PartnerA-stubs</id>
 							<goals>
 								<goal>wsimport</goal>
@@ -189,9 +189,9 @@
 	                <packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName>
 	                <sourceDestDir>src/main/java</sourceDestDir>
 	            </configuration>
-						</execution>
+						</execution> -->
 					</executions>
-        </plugin> -->
+        </plugin>
 		</plugins>
 	</build>
 
