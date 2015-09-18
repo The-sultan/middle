@@ -5,7 +5,7 @@
 	<groupId>intmiddleware</groupId>
 	<artifactId>prueba1</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>prueba1</name>
 
 	<properties>
@@ -13,6 +13,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<dependency>
+      <groupId>com.sun.xml.ws</groupId>
+      <artifactId>jaxws-rt</artifactId>
+      <version>2.2.8</version>
+    </dependency>
 		<dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-stream</artifactId>
@@ -39,10 +44,31 @@
 			<artifactId>spring-integration-java-dsl</artifactId>
 		<version>1.0.0.RELEASE</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.2.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+			<artifactId>jaxws-spring</artifactId>
+			<version>1.9</version>
+		</dependency>
 		<dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -77,15 +103,15 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<!--<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-			</plugin>-->
-			<!-- <plugin>
+			</plugin>
+			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.2.13.v20150730</version>
@@ -99,7 +125,7 @@
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
 				</configuration>
-			</plugin> -->
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -118,6 +144,36 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- usage of jax-ws maven plugin-->
+        <plugin>
+					<groupId>org.jvnet.jax-ws-commons</groupId>
+					<artifactId>jaxws-maven-plugin</artifactId>
+					<version>2.3</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>wsimport</goal>
+							</goals>
+						</execution>
+					</executions>
+            <configuration>
+							<vmArgs>
+        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+    					</vmArgs>
+                <!-- or using wsdls file directory -->
+                    <wsdlDirectory>src/wsdl</wsdlDirectory>
+                <!-- which wsdl file -->
+                <wsdlFiles>
+                    <wsdlFile>payment-service.wsdl</wsdlFile>
+                </wsdlFiles>
+                <!-- Keep generated files -->
+                <keep>true</keep>
+                <!-- Package name -->
+                <packageName>uy.edu.fing.inco.lins.generated</packageName>
+                <!-- generated source files destination-->
+                <sourceDestDir>src/main/java</sourceDestDir>
+            </configuration>
+        </plugin>
 		</plugins>
 	</build>
 
