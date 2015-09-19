@@ -18,14 +18,12 @@ public class ConsolidaTicketPago {
 	@Aggregator(inputChannel = "ticketChannel", outputChannel = "responseChannel")
 	public ConfirmacionTransaccion prepareDelivery(List<ConfirmacionPago> tickets) {
 		ConfirmacionTransaccion ct = new ConfirmacionTransaccion();
-		ConfirmacionPago cp = new ConfirmacionPago();
-		cp.setDescripcion("test");
-		ct.getConfirmacion().add(cp);
+		ct.getConfirmacion().addAll(tickets);
 		return ct;
 	}
 
 	@CorrelationStrategy
-	public long correlateByOrderNumber(ConfirmacionPago ticket) {
+	public long ordenarPor(ConfirmacionPago ticket) {
 		return ticket.getIdentificadorPago();
 	}
 

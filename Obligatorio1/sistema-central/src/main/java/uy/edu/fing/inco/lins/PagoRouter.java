@@ -3,8 +3,6 @@ package uy.edu.fing.inco.lins;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
-import uy.edu.fing.inco.lins.generated.Pago;
-
 /**
  * @author Mauricio Vignale
  */
@@ -12,7 +10,7 @@ import uy.edu.fing.inco.lins.generated.Pago;
 public class PagoRouter {
 
 	@Router(inputChannel="pagoIndividual")
-	public String resolveOrderItemChannel(Pago pagoItem) {
+	public String resolveOrderItemChannel(PagoMOM pagoItem) {
 		switch(pagoItem.getNombreGestion()) {
  			case "ENTRADAS":
 			 	return "pagoEntradas";

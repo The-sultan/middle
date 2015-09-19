@@ -136,24 +136,24 @@
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<version>2.3</version>
 				<executions>
-					<execution>
-						<id>MOM-stubs</id>
-						<goals>
-							<goal>wsimport</goal>
-						</goals>
-						<configuration>
-							<vmArgs>
-								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-							</vmArgs>
-							<wsdlDirectory>src/wsdl</wsdlDirectory>
-							<wsdlFiles>
-								<wsdlFile>payment-service.wsdl</wsdlFile>
-							</wsdlFiles>
-							<keep>true</keep>
-							<packageName>uy.edu.fing.inco.lins.generated</packageName>
-							<sourceDestDir>src/main/java</sourceDestDir>
-						</configuration>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>MOM-stubs</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>wsimport</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<vmArgs> -->
+<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
+<!-- 							</vmArgs> -->
+<!-- 							<wsdlDirectory>src/wsdl</wsdlDirectory> -->
+<!-- 							<wsdlFiles> -->
+<!-- 								<wsdlFile>payment-service.wsdl</wsdlFile> -->
+<!-- 							</wsdlFiles> -->
+<!-- 							<keep>true</keep> -->
+<!-- 							<packageName>uy.edu.fing.inco.lins.generated</packageName> -->
+<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 <!-- 					<execution> -->
 <!-- 						<id>PartnerA-stubs</id> -->
 <!-- 						<goals> -->
