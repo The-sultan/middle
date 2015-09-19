@@ -43,7 +43,7 @@ public class VentaEntradasEndpoint {
     	
     	date = new Date();
         String msg = "";
-        String requestMsg = String.format("cantEntradas: %d, monedaID: %d, monto: %s, fecha: %tB",cantEntradas, monedaID, NumberFormat.getCurrencyInstance().format(monto), fecha);
+        String requestMsg = String.format("cantEntradas: %d, monedaID: %s, monto: %s, fecha: %tB",cantEntradas, monedaID, NumberFormat.getCurrencyInstance().format(monto), fecha);
         log.add(date + ": -->" + requestMsg);
         
     	MessageContext messageContext = webServiceContext.getMessageContext();
@@ -53,8 +53,7 @@ public class VentaEntradasEndpoint {
     	
     	String username = "";
     	String password = "";
-    	
-    	if ((usernameList == null) || (passwordList == null)){
+       	if ((usernameList == null) || (passwordList == null)){
     		msg = "Usuario o password incorrecto";
             log.add(date + ": -->" + msg);
             throw new LoginIncorrecto(msg);
@@ -76,7 +75,7 @@ public class VentaEntradasEndpoint {
         }
         
         //TODO ver que hacemos con el control de la cantidad de entradas 
-        if (cantEntradas < 100){
+        if (cantEntradas > 100){
         	msg = "Cantidad no disponible. Máximo disponible : " + 100;
             log.add(date + ": -->" + msg);
             throw new CantidadInsuficienteEntradas(msg);
@@ -94,7 +93,7 @@ public class VentaEntradasEndpoint {
 	}
     
     @WebMethod
-    public @WebResult(name="log") List<String> pagoFacturaLog(){
+    public @WebResult(name="log") List<String> ventaEntradaLog(){
         return log;
     }
 
