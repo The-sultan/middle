@@ -17,3 +17,6 @@ hs_err_pid*
 /Obligatorio1/partner-1-facturas/target/
 /Obligatorio1/partner-2-entradas/target/
 **/generated/**
+.classpath
+.settings
+.project

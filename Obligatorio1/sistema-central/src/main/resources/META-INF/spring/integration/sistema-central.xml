@@ -15,12 +15,15 @@
 
 	<int:annotation-config/>
 
+
+	
 	<!-- Bean del conversor de Farenheit a Celsius, TESTING ONLY -->
 	<int:gateway id="tempTest" service-interface="uy.edu.fing.inco.lins.TempConverter"/>
 
 	<context:component-scan base-package="uy.edu.fing.inco.lins"/>
 	<!-- Pago del cliente (o de la sucursal, es lo mismo) que dispara el flujo de Spring Integration -->
-	<int:gateway id="pago" service-interface="uy.edu.fing.inco.lins.PagoCliente"/>
+	<int:gateway id="pago" service-interface="uy.edu.fing.inco.lins.PagoCliente" >
+	</int:gateway>
 
 	<!-- Canal que recibe un pago y convierte en una orden de pago -->
 	<int:channel id="ordenes"/>
@@ -48,6 +51,6 @@
 		<int:poller fixed-delay="1000"/>
 	</int:bridge>
 	<!-- Canal unico de respuesta a la sucursal que emitio el pago  -->
-	<int-stream:stdout-channel-adapter id="responseChannel"/>
+	<int:channel id="responseChannel"/>
 
 </beans:beans>

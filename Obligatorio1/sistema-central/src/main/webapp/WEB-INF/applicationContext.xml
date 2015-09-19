@@ -16,7 +16,7 @@
         </wss:service>
     </wss:binding>
 
-    <!-- Web service bean -->
-    <bean id="myserviceWs" class="uy.edu.fing.inco.lins.ServicioRecepcionPagosImpl"/>
+	<bean id="myserviceWs" class="uy.edu.fing.inco.lins.ServicioRecepcionPagosImpl"/>
+
 
 </beans>

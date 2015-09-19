@@ -2,11 +2,12 @@ package uy.edu.fing.inco.lins;
 
 import java.util.List;
 
-import uy.edu.fing.inco.lins.RespuestaTicketPago;
-import uy.edu.fing.inco.lins.TicketPago;
 import org.springframework.integration.annotation.Aggregator;
 import org.springframework.integration.annotation.CorrelationStrategy;
 import org.springframework.integration.annotation.MessageEndpoint;
+
+import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
+import uy.edu.fing.inco.lins.generated.ConfirmacionTransaccion;
 
 /**
  * @author Mauricio Vignale
@@ -15,13 +16,17 @@ import org.springframework.integration.annotation.MessageEndpoint;
 public class ConsolidaTicketPago {
 
 	@Aggregator(inputChannel = "ticketChannel", outputChannel = "responseChannel")
-	public RespuestaTicketPago prepareDelivery(List<TicketPago> tickets) {
-		return new RespuestaTicketPago(tickets);
+	public ConfirmacionTransaccion prepareDelivery(List<ConfirmacionPago> tickets) {
+		ConfirmacionTransaccion ct = new ConfirmacionTransaccion();
+		ConfirmacionPago cp = new ConfirmacionPago();
+		cp.setDescripcion("test");
+		ct.getConfirmacion().add(cp);
+		return ct;
 	}
 
 	@CorrelationStrategy
-	public int correlateByOrderNumber(TicketPago ticket) {
-		return ticket.getOrdenId();
+	public long correlateByOrderNumber(ConfirmacionPago ticket) {
+		return ticket.getIdentificadorPago();
 	}
 
 }

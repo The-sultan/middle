@@ -2,23 +2,19 @@ package uy.edu.fing.inco.lins;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import uy.edu.fing.inco.lins.TicketPago;
-import uy.edu.fing.inco.lins.OrdenPagoItem;
-import uy.edu.fing.inco.lins.TempConverter;
 import org.apache.log4j.Logger;
-import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.stereotype.Component;
-
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.integration.annotation.Gateway;
-import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.support.Transformers;
 import org.springframework.integration.ws.SimpleWebServiceOutboundGateway;
 import org.springframework.integration.ws.WebServiceHeaders;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+
+import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
+import uy.edu.fing.inco.lins.generated.Pago;
 
 /**
  * @author Mauricio Vignale
@@ -35,37 +31,33 @@ public class ProcesaOrdenPago {
 
 
 	@ServiceActivator(inputChannel="partnerEntradas", outputChannel="ticketChannel")
-	public TicketPago entradas(OrdenPagoItem ordenPagoItem) {
+	public ConfirmacionPago entradas(Pago pagoItem) {
 		// aca se engancha la logica del WS partner de Entradas
-		AbstractApplicationContext ctx =
-			new ClassPathXmlApplicationContext("/META-INF/spring/integration/sistema-central.xml", ProcesaOrdenPago.class);
-
-			TempConverter converter = (TempConverter)ctx.getBean("tempTest");
-			logger.info(Thread.currentThread().getName()
-					+ "Pago del Item # " + pagoEntradas.incrementAndGet() + " de la orden #"
-					+ ordenPagoItem.getOrdenId() + ": " + ordenPagoItem +" LLAMADA A WS " + converter.fahrenheitToCelcius(68.0f));
-			return new TicketPago(ordenPagoItem.getOrdenId(), ordenPagoItem.getTipoPago());
+		
+			return new ConfirmacionPago();
 
 	}
 
 	@ServiceActivator(inputChannel="partnerFacturas", outputChannel="ticketChannel")
-	public TicketPago facturas(OrdenPagoItem ordenPagoItem) {
+	public ConfirmacionPago facturas(Pago pagoItem) {
+		return new ConfirmacionPago();
 		// aca se engancha la logica del WS partner de Facturas
 
-			logger.info(Thread.currentThread().getName()
-					+ "Pago del Item # " + pagoFacturas.incrementAndGet() + " de la orden #"
-					+ ordenPagoItem.getOrdenId() + ": " + ordenPagoItem);
-					return new TicketPago(ordenPagoItem.getOrdenId(), ordenPagoItem.getTipoPago());
+//			logger.info(Thread.currentThread().getName()
+//					+ "Pago del Item # " + pagoFacturas.incrementAndGet() + " de la orden #"
+//					+ pagoItem.getOrdenId() + ": " + pagoItem);
+//					return new TicketPago(pagoItem.getOrdenId(), pagoItem.getTipoPago());
 
 	}
 
 	@ServiceActivator(inputChannel="partnerOffline", outputChannel="ticketChannel")
-	public TicketPago offline(OrdenPagoItem ordenPagoItem) {
+	public ConfirmacionPago offline(Pago pagoItem) {
+		return new ConfirmacionPago();
 		// aca se engancha la logica del CSV de pago offline
-			logger.info(Thread.currentThread().getName()
-					+ " Pago del Item #" + pagoOffline.incrementAndGet() + " de la orden #"
-					+ ordenPagoItem.getOrdenId() + ": " + ordenPagoItem);
-					return new TicketPago(ordenPagoItem.getOrdenId(), ordenPagoItem.getTipoPago());
+//			logger.info(Thread.currentThread().getName()
+//					+ " Pago del Item #" + pagoOffline.incrementAndGet() + " de la orden #"
+//					+ pagoItem.getOrdenId() + ": " + pagoItem);
+//					return new TicketPago(pagoItem.getOrdenId(), pagoItem.getTipoPago());
 
 	}
 

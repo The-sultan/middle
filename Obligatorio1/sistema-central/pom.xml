@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>intmiddleware</groupId>
@@ -14,21 +15,18 @@
 	</properties>
 	<dependencies>
 		<dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-rt</artifactId>
-      <version>2.2.8</version>
-    </dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.8</version>
+		</dependency>
 		<dependency>
-      <groupId>org.springframework.integration</groupId>
-      <artifactId>spring-integration-stream</artifactId>
-      <version>4.1.6.RELEASE</version>
-      <scope>compile</scope>
-    </dependency>
-		<!-- <dependency>
 			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-core</artifactId>
+			<artifactId>spring-integration-stream</artifactId>
 			<version>4.1.6.RELEASE</version>
-		</dependency> -->
+			<scope>compile</scope>
+		</dependency>
+		<!-- <dependency> <groupId>org.springframework.integration</groupId> <artifactId>spring-integration-core</artifactId> 
+			<version>4.1.6.RELEASE</version> </dependency> -->
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-ws</artifactId>
@@ -42,7 +40,7 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-java-dsl</artifactId>
-		<version>1.0.0.RELEASE</version>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -70,10 +68,10 @@
 			<version>1.9</version>
 		</dependency>
 		<dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-    </dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -111,8 +109,8 @@
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
 					<httpConnector>
-          	<port>8080</port>
-        	</httpConnector>
+						<port>8080</port>
+					</httpConnector>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -133,65 +131,65 @@
 					</execution>
 				</executions>
 			</plugin>
-        <plugin>
-					<groupId>org.jvnet.jax-ws-commons</groupId>
-					<artifactId>jaxws-maven-plugin</artifactId>
-					<version>2.3</version>
-					<executions>
-						<execution>
-							<id>MOM-stubs</id>
-							<goals>
-								<goal>wsimport</goal>
-							</goals>
-							<configuration>
-								<vmArgs>
-	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-	    					</vmArgs>
-	                    <wsdlDirectory>src/wsdl</wsdlDirectory>
-	                <wsdlFiles>
-	                    <wsdlFile>payment-service.wsdl</wsdlFile>
-	                </wsdlFiles>
-	                <keep>true</keep>
-	                <packageName>uy.edu.fing.inco.lins.generated</packageName>
-	                <sourceDestDir>src/main/java</sourceDestDir>
-	            </configuration>
-						</execution>
-						<!-- <execution>
-							<id>PartnerA-stubs</id>
-							<goals>
-								<goal>wsimport</goal>
-							</goals>
-							<configuration>
-								<vmArgs>
-	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-	    					</vmArgs>
-								<wsdlUrls>
-	                <wsdlUrl>http://localhost:8081/jaxws-spring?wsdl</wsdlUrl>
-	              </wsdlUrls>
-	                <keep>true</keep>
-	                <packageName>uy.edu.fing.inco.lins.generated.partnerfactura</packageName>
-	                <sourceDestDir>src/main/java</sourceDestDir>
-	            </configuration>
-						</execution>
-						<execution>
-							<id>PartnerB-stubs</id>
-							<goals>
-								<goal>wsimport</goal>
-							</goals>
-							<configuration>
-								<vmArgs>
-	        				<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-	    					</vmArgs>
-								<wsdlUrls>
-									<wsdlUrl>http://localhost:8082/jaxws-spring?wsdl</wsdlUrl>
-	              </wsdlUrls>
-	                <keep>true</keep>
-	                <packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName>
-	                <sourceDestDir>src/main/java</sourceDestDir>
-	            </configuration>
-						</execution> -->
-					</executions>
-        </plugin>
+			<plugin>
+				<groupId>org.jvnet.jax-ws-commons</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>MOM-stubs</id>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<vmArgs>
+								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+							</vmArgs>
+							<wsdlDirectory>src/wsdl</wsdlDirectory>
+							<wsdlFiles>
+								<wsdlFile>payment-service.wsdl</wsdlFile>
+							</wsdlFiles>
+							<keep>true</keep>
+							<packageName>uy.edu.fing.inco.lins.generated</packageName>
+							<sourceDestDir>src/main/java</sourceDestDir>
+						</configuration>
+					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>PartnerA-stubs</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>wsimport</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<vmArgs> -->
+<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
+<!-- 							</vmArgs> -->
+<!-- 							<wsdlUrls> -->
+<!-- 								<wsdlUrl>http://localhost:8081/jaxws-spring?wsdl</wsdlUrl> -->
+<!-- 							</wsdlUrls> -->
+<!-- 							<keep>true</keep> -->
+<!-- 							<packageName>uy.edu.fing.inco.lins.generated.partnerfactura</packageName> -->
+<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 					<execution> -->
+<!-- 						<id>PartnerB-stubs</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>wsimport</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<vmArgs> -->
+<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
+<!-- 							</vmArgs> -->
+<!-- 							<wsdlUrls> -->
+<!-- 								<wsdlUrl>http://localhost:8082/jaxws-spring?wsdl</wsdlUrl> -->
+<!-- 							</wsdlUrls> -->
+<!-- 							<keep>true</keep> -->
+<!-- 							<packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName> -->
+<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

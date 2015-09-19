@@ -2,10 +2,11 @@ package uy.edu.fing.inco.lins;
 
 import java.util.List;
 
-import uy.edu.fing.inco.lins.OrdenPago;
-import uy.edu.fing.inco.lins.OrdenPagoItem;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Splitter;
+
+import uy.edu.fing.inco.lins.generated.Pago;
+import uy.edu.fing.inco.lins.generated.TransaccionPago;
 
 /**
  * @author Mauricio Vignale
@@ -14,8 +15,8 @@ import org.springframework.integration.annotation.Splitter;
 public class OrdenPagoSplitter {
 
 	@Splitter(inputChannel="ordenes", outputChannel="pagoIndividual")
-	public List<OrdenPagoItem> split(OrdenPago orden) {
-		return orden.getItems();
+	public List<Pago> split(TransaccionPago orden) {
+		return orden.getPagos();
 	}
 
 }
