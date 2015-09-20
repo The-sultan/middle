@@ -14,6 +14,7 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
@@ -45,41 +46,6 @@ public class VentaEntradasEndpoint {
         String msg = "";
         String requestMsg = String.format("cantEntradas: %d, monedaID: %s, monto: %s, fecha: %tB",cantEntradas, monedaID, NumberFormat.getCurrencyInstance().format(monto), fecha);
         log.add(date + ": -->" + requestMsg);
-        
-    	MessageContext messageContext = webServiceContext.getMessageContext();
-    	Map<?,?> requestHeaders = (Map<?,?>) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
-    	List<?> usernameList = (List<?>) requestHeaders.get("username");
-    	List<?> passwordList = (List<?>) requestHeaders.get("password");
-    	
-    	String username = "";
-    	String password = "";
-       	if ((usernameList == null) || (passwordList == null)){
-    		msg = "Usuario o password incorrecto";
-            log.add(date + ": -->" + msg);
-            throw new LoginIncorrecto(msg);
-    	}
-    	
-    	username = usernameList.get(0).toString();
-    	password = passwordList.get(0).toString();
-    	
-    	if (!username.equals("venta") || (!password.equals("venta"))){
-    		msg = "Usuario o password incorrecto";
-            log.add(date + ": -->" + msg);
-            throw new LoginIncorrecto(msg);
-    	}
-        
-        if(monedaID.equals("854") && monedaID.equals("840")){
-            msg = "Moneda no encontrada";
-            log.add(date + ": -->" + msg);
-            throw new MonedaNoEncontrada(msg);
-        }
-        
-        //TODO ver que hacemos con el control de la cantidad de entradas 
-        if (cantEntradas > 100){
-        	msg = "Cantidad no disponible. Máximo disponible : " + 100;
-            log.add(date + ": -->" + msg);
-            throw new CantidadInsuficienteEntradas(msg);
-        }
         
         List<String> respuesta = new ArrayList<>();
         respuesta.add(String.valueOf(System.currentTimeMillis()));

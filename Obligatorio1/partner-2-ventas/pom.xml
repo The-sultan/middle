@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>uy.edu.fing.middleware.obligatorio1.ws</groupId>
-  <artifactId>partner-2-ventas</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>partner-2-ventas</name>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>uy.edu.fing.middleware.obligatorio1.ws</groupId>
+	<artifactId>partner-2-ventas</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>partner-2-ventas</name>
 
-  <build>
+	<build>
 		<finalName>ventas</finalName>
 		<plugins>
 			<!-- Plugin para generar el war y que no falle por falta de web.xml-->
@@ -32,9 +32,21 @@
 					<scanTargets>
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
-          <httpConnector>
+					<httpConnector>
 						<port>8082</port>
 					</httpConnector>
+				</configuration>
+			</plugin>
+			<plugin>  
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<path>/${project.build.finalName}</path>
+					<update>true</update>
+					<url>http://localhost:8080/manager/text</url>
+					<username>tomcat</username>
+					<password>tomcatuser</password>
 				</configuration>
 			</plugin>
 		</plugins>

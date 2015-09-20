@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>intmiddleware</groupId>
-	<artifactId>prueba1</artifactId>
+	<artifactId>sistema-central</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>prueba1</name>
+	<name>sistema-central</name>
 
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -26,7 +26,7 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- <dependency> <groupId>org.springframework.integration</groupId> <artifactId>spring-integration-core</artifactId> 
-			<version>4.1.6.RELEASE</version> </dependency> -->
+		<version>4.1.6.RELEASE</version> </dependency> -->
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-ws</artifactId>
@@ -114,83 +114,76 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.5.1</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<includeScope>runtime</includeScope>
-							<outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.jvnet.jax-ws-commons</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<version>2.3</version>
-				<executions>
-<!-- 					<execution> -->
-<!-- 						<id>MOM-stubs</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>wsimport</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<vmArgs> -->
-<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
-<!-- 							</vmArgs> -->
-<!-- 							<wsdlDirectory>src/wsdl</wsdlDirectory> -->
-<!-- 							<wsdlFiles> -->
-<!-- 								<wsdlFile>payment-service.wsdl</wsdlFile> -->
-<!-- 							</wsdlFiles> -->
-<!-- 							<keep>true</keep> -->
-<!-- 							<packageName>uy.edu.fing.inco.lins.generated</packageName> -->
-<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 					<execution> -->
-<!-- 						<id>PartnerA-stubs</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>wsimport</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<vmArgs> -->
-<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
-<!-- 							</vmArgs> -->
-<!-- 							<wsdlUrls> -->
-<!-- 								<wsdlUrl>http://localhost:8081/jaxws-spring?wsdl</wsdlUrl> -->
-<!-- 							</wsdlUrls> -->
-<!-- 							<keep>true</keep> -->
-<!-- 							<packageName>uy.edu.fing.inco.lins.generated.partnerfactura</packageName> -->
-<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 					<execution> -->
-<!-- 						<id>PartnerB-stubs</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>wsimport</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<vmArgs> -->
-<!-- 								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
-<!-- 							</vmArgs> -->
-<!-- 							<wsdlUrls> -->
-<!-- 								<wsdlUrl>http://localhost:8082/jaxws-spring?wsdl</wsdlUrl> -->
-<!-- 							</wsdlUrls> -->
-<!-- 							<keep>true</keep> -->
-<!-- 							<packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName> -->
-<!-- 							<sourceDestDir>src/main/java</sourceDestDir> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-				</executions>
+				<!--				<executions>
+					<execution> 
+						<id>MOM-stubs</id> 
+						<goals> 
+							<goal>wsimport</goal> 
+						</goals> 
+						<configuration> 
+							<vmArgs> 
+								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> 
+							</vmArgs> 
+							<wsdlDirectory>src/wsdl</wsdlDirectory> 
+							<wsdlFiles> 
+								<wsdlFile>payment-service.wsdl</wsdlFile> 
+							</wsdlFiles> 
+							<keep>true</keep> 
+							<packageName>uy.edu.fing.inco.lins.generated</packageName> 
+							<sourceDestDir>src/main/java</sourceDestDir> 
+						</configuration> 
+					</execution> 
+					<execution> 
+						<id>PartnerA-stubs</id> 
+						<goals> 
+							<goal>wsimport</goal> 
+						</goals> 
+						<configuration> 
+							<vmArgs> 
+								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> 
+							</vmArgs> 
+							<wsdlUrls> 
+								<wsdlUrl>http://localhost:8080/facturas/jaxws-spring?wsdl</wsdlUrl> 
+							</wsdlUrls> 
+							<keep>true</keep> 
+							<packageName>uy.edu.fing.inco.lins.generated.partnerfactura</packageName> 
+							<sourceDestDir>src/main/java</sourceDestDir> 
+						</configuration> 
+					</execution> 
+					<execution> 
+						<id>PartnerB-stubs</id> 
+						<goals> 
+							<goal>wsimport</goal> 
+						</goals> 
+						<configuration> 
+							<vmArgs> 
+								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> 
+							</vmArgs> 
+							<wsdlUrls> 
+								<wsdlUrl>http://localhost:8080/ventas/jaxws-spring?wsdl</wsdlUrl> 
+							</wsdlUrls> 
+							<keep>true</keep> 
+							<packageName>uy.edu.fing.inco.lins.generated.partnerventa</packageName> 
+							<sourceDestDir>src/main/java</sourceDestDir> 
+						</configuration> 
+					</execution> 
+				</executions>-->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<path>/${project.build.finalName}</path>
+					<update>true</update>
+					<url>http://localhost:8080/manager/text</url>
+					<username>tomcat</username>
+					<password>tomcatuser</password>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

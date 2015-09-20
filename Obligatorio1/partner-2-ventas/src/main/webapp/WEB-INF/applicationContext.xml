@@ -12,11 +12,17 @@
 
     <wss:binding url="/jaxws-spring">
         <wss:service>
-            <ws:service bean="#myserviceWs"/>
+            <ws:service bean="#myserviceWs">
+				<ws:handlers>
+					<ref bean="soap-handler"/>
+				</ws:handlers>
+			</ws:service>	
         </wss:service>
     </wss:binding>
 
     <!-- Web service bean -->
     <bean id="myserviceWs" class="uy.edu.fing.middleware.obligatorio1.ws.VentaEntradasEndpoint"/>
+	
+	<bean id="soap-handler" class="uy.edu.fing.middleware.obligatorio1.ws.handler.SoapHandler"/>
 
 </beans>

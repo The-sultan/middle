@@ -20,3 +20,5 @@ hs_err_pid*
 .classpath
 .settings
 .project
+/Obligatorio1/sistema-central/target/
+/Obligatorio1/partner-2-ventas/target/
