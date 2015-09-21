@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.domain;
 
 import java.io.Serializable;
 
@@ -9,7 +9,6 @@ public enum TipoPago implements Serializable{
 
 	ENTRADAS,
 	FACTURA,
-	OFFLINE,
-	OTROS
+	OFFLINE
 
 }

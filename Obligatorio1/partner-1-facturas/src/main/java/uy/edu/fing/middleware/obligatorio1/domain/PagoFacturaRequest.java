@@ -1,11 +1,11 @@
 
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.middleware.obligatorio1.domain;
 
 import java.math.BigDecimal;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-public class PagoFacturaMOM {
+public class PagoFacturaRequest {
 
     private long facturaID;
     private short monedaID;

@@ -42,10 +42,17 @@
 
 	<!-- Canal que consolida los TicketPago cuando se procesan -->
 	<int:channel id="ticketChannel" />
+	
 	<!-- Pasamano para que el ProcesaOrdenPago sea mas legible -->
 	<int:bridge input-channel="partnerFacturas" output-channel="serviceFacturas">
 		<int:poller fixed-delay="1000" />
 	</int:bridge>
+	
+	<int:service-activator input-channel="serviceFacturas" ref="facturaService" method="pagoFactura" output-channel="pagoResponseTransformerChannel"/>
+	
+	
+	
+	
 	<int:bridge input-channel="partnerEntradas" output-channel="serviceEntradas">
 		<int:poller fixed-delay="1000" />
 	</int:bridge>

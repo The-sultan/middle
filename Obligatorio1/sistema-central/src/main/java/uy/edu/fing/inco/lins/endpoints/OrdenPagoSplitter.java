@@ -1,10 +1,11 @@
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.endpoints;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Splitter;
+import uy.edu.fing.inco.lins.domain.PagoMOM;
 
 import uy.edu.fing.inco.lins.generated.Pago;
 import uy.edu.fing.inco.lins.generated.TransaccionPago;
@@ -17,7 +18,7 @@ public class OrdenPagoSplitter {
 
 	@Splitter(inputChannel="ordenes", outputChannel="pagoIndividual")
 	public List<PagoMOM> split(TransaccionPago orden) {
-		List<PagoMOM> result = new ArrayList<PagoMOM>();
+		List<PagoMOM> result = new ArrayList<>();
 		for (Pago  pago : orden.getPagos()) {
 			PagoMOM pagoMom = new PagoMOM();
 			pagoMom.setCodigoMoneda(pago.getCodigoMoneda());

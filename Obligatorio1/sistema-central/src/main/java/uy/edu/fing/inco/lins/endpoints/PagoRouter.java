@@ -1,7 +1,8 @@
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.endpoints;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
+import uy.edu.fing.inco.lins.domain.PagoMOM;
 
 /**
  * @author Mauricio Vignale
@@ -12,12 +13,14 @@ public class PagoRouter {
 	@Router(inputChannel="pagoIndividual")
 	public String resolveOrderItemChannel(PagoMOM pagoItem) {
 		switch(pagoItem.getNombreGestion()) {
- 			case "ENTRADAS":
+ 			case "Entradas":
 			 	return "pagoEntradas";
- 			case "FACTURAS":
+ 			case "Factura":
  				return "pagoFacturas";
- 	 		default:
+            case "Offline":
  	 			return "pagoOffline";
+            default : 
+                throw new RuntimeException();
  		}
 	}
 

@@ -1,9 +1,11 @@
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.endpoints;
 
 import java.math.BigDecimal;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Transformer;
+import uy.edu.fing.inco.lins.domain.PagoMOM;
+import uy.edu.fing.inco.lins.domain.VentaEntradasMOM;
 
 /**
  * @author Mauricio Vignale

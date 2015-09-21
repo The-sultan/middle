@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.endpoints;
 
 import java.util.List;
 

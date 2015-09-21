@@ -1,5 +1,5 @@
 
-package uy.edu.fing.inco.lins;
+package uy.edu.fing.inco.lins.domain;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,26 +1,25 @@
 package uy.edu.fing.inco.lins;
 
+import uy.edu.fing.inco.lins.domain.VentaEntradasMOM;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.stereotype.Component;
 
 import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
 import uy.edu.fing.inco.lins.generated.Pago;
 import uy.edu.fing.inco.lins.generated.partnerfactura.FacturaNoEncontrada_Exception;
 import uy.edu.fing.inco.lins.generated.partnerfactura.MonedaNoEncontrada_Exception;
-import uy.edu.fing.inco.lins.generated.partnerfactura.PagoFactura;
 import uy.edu.fing.inco.lins.generated.partnerfactura.PagoFacturaEndpointService;
+import uy.edu.fing.inco.lins.generated.partnerfactura.PagoFacturaRequest;
 import uy.edu.fing.inco.lins.generated.partnerventa.CantidadInsuficienteEntradas_Exception;
 import uy.edu.fing.inco.lins.generated.partnerventa.LoginIncorrecto_Exception;
-import uy.edu.fing.inco.lins.generated.partnerventa.VentaEntradas;
 import uy.edu.fing.inco.lins.generated.partnerventa.VentaEntradasEndpointService;
 
 /**
  * @author Mauricio Vignale
  */
-@Component
+//@Component
 public class ProcesaOrdenPago {
 	private static final Logger logger = Logger.getLogger(ProcesaOrdenPago.class);
 
@@ -46,13 +45,13 @@ public class ProcesaOrdenPago {
 	}
 
 	@ServiceActivator(inputChannel="serviceFacturas", outputChannel="ticketChannel")
-	public ConfirmacionPago facturas(PagoFacturaMOM facturaItem) {
+	public ConfirmacionPago facturas(PagoFacturaRequest facturaItem) {
 		ConfirmacionPago cp = new ConfirmacionPago();
 		cp.setIdentificadorPago(facturaItem.getFacturaID());
 		Integer result = null;
 		PagoFacturaEndpointService servicioFacturas = new PagoFacturaEndpointService();
 		try {
-			result = servicioFacturas.getPagoFacturaEndpointPort().pagoFactura(facturaItem.getFacturaID(), facturaItem.getMonedaID(), facturaItem.getMonto(), facturaItem.getFecha());
+			result = servicioFacturas.getPagoFacturaEndpointPort().pagoFactura(facturaItem);
 		} catch (NumberFormatException | FacturaNoEncontrada_Exception | MonedaNoEncontrada_Exception e) {
 			cp.setResultado("ERROR");
 			cp.setDescripcion(e.getLocalizedMessage());
