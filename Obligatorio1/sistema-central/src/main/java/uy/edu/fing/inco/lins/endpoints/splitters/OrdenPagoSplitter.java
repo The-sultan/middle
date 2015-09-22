@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints;
+package uy.edu.fing.inco.lins.endpoints.splitters;
 
 import java.util.ArrayList;
 import java.util.List;

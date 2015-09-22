@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints;
+package uy.edu.fing.inco.lins.endpoints.transformers;
 
 
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -9,9 +9,9 @@ import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
  * @author Farid
  */
 @MessageEndpoint
-public class PagoToTicketTransformer {
+public class FacturaToTicketTransformer {
 
-	@Transformer(inputChannel="pagoResponseTransformerChannel", outputChannel="ticketChannel")
+	@Transformer(inputChannel="pagoFacturaTransformerChannel", outputChannel="ticketChannel")
 	public ConfirmacionPago pagoFacturaConverter(Integer pagoId) {
 		ConfirmacionPago result = new ConfirmacionPago();
         result.setResultado("OK");

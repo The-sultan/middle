@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints;
+package uy.edu.fing.inco.lins.endpoints.splitters.routers;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;

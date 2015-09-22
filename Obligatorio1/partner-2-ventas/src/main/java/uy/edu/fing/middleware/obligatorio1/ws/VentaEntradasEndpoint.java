@@ -1,22 +1,18 @@
 package uy.edu.fing.middleware.obligatorio1.ws;
 
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
+import uy.edu.fing.middleware.obligatorio1.ws.domain.VentaEntradasRequest;
+import uy.edu.fing.middleware.obligatorio1.ws.domain.VentaEntradasResult;
 
 import uy.edu.fing.middleware.obligatorio1.ws.exceptions.CantidadInsuficienteEntradas;
 import uy.edu.fing.middleware.obligatorio1.ws.exceptions.LoginIncorrecto;
@@ -35,26 +31,22 @@ public class VentaEntradasEndpoint {
     Date date;
 
     @WebMethod
-    public  List<String> ventaEntradas(@WebParam(name = "cantEntradas") @XmlElement(required=true) short cantEntradas, 
-            @WebParam(name = "monedaID") @XmlElement(required=true) String monedaID, 
-            @WebParam(name = "monto") @XmlElement(required=true) BigDecimal monto, 
-            @WebParam(name = "fecha") @XmlElement(required=true) GregorianCalendar fecha) 
+    public  VentaEntradasResult ventaEntradas(@XmlElement(required=true) VentaEntradasRequest ventaEntradas) 
             throws LoginIncorrecto,MonedaNoEncontrada, CantidadInsuficienteEntradas{
        
     	
     	date = new Date();
-        String msg = "";
-        String requestMsg = String.format("cantEntradas: %d, monedaID: %s, monto: %s, fecha: %tB",cantEntradas, monedaID, NumberFormat.getCurrencyInstance().format(monto), fecha);
+        String requestMsg = String.format("cantEntradas: %d, monedaID: %s, monto: %s, fecha: %s",ventaEntradas.getCantEntradas(),
+                ventaEntradas.getMonedaID(), NumberFormat.getCurrencyInstance().format(ventaEntradas.getMonto()), ventaEntradas.getFecha() == null ? "" : ventaEntradas.getFecha().toString());
         log.add(date + ": -->" + requestMsg);
-        
-        List<String> respuesta = new ArrayList<>();
-        respuesta.add(String.valueOf(System.currentTimeMillis()));
-        for (int i = 0 ; i<cantEntradas ; i ++ ) {
-        	respuesta.add(String.valueOf(i));
+        VentaEntradasResult respuesta = new VentaEntradasResult();
+        List<String> codigosEntradas = new ArrayList<>();
+        for (int i = 0 ; i<ventaEntradas.getCantEntradas() ; i ++ ) {
+        	codigosEntradas.add(String.valueOf(System.currentTimeMillis()));
         }
-       
-        log.add(date + ": -->" + respuesta.toString());
-        
+        respuesta.setCobroID((Double.valueOf(Math.random()*100).longValue()));
+        respuesta.setCodigosEntradas(codigosEntradas);
+        log.add(String.format("%tB: --> cobroid %d, Entradas: %s",date, respuesta.getCobroID(), respuesta.getCodigosEntradas().toString()));
         return respuesta;
 	}
     

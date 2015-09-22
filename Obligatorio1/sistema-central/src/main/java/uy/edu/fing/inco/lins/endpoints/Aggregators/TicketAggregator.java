@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints;
+package uy.edu.fing.inco.lins.endpoints.Aggregators;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import uy.edu.fing.inco.lins.generated.ConfirmacionTransaccion;
  * @author Mauricio Vignale
  */
 @MessageEndpoint
-public class ConsolidaTicketPago {
+public class TicketAggregator {
 
 	@Aggregator(inputChannel = "ticketChannel", outputChannel = "responseChannel")
 	public ConfirmacionTransaccion prepareDelivery(List<ConfirmacionPago> tickets) {

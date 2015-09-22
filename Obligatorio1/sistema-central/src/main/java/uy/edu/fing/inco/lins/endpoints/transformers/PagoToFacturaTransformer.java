@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints;
+package uy.edu.fing.inco.lins.endpoints.transformers;
 
 import java.math.BigDecimal;
 
@@ -12,7 +12,7 @@ import uy.edu.fing.inco.lins.generated.partnerfactura.PagoFacturaRequest;
  * @author Farid
  */
 @MessageEndpoint
-public class PagoFacturaConverter {
+public class PagoToFacturaTransformer {
 
 	@Transformer(inputChannel="pagoFacturas", outputChannel="partnerFacturas")
 	public PagoFacturaRequest pagoFacturaConverter(PagoMOM pagoMOM) {

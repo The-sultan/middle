@@ -48,14 +48,17 @@
 		<int:poller fixed-delay="1000" />
 	</int:bridge>
 	
-	<int:service-activator input-channel="serviceFacturas" ref="facturaService" method="pagoFactura" output-channel="pagoResponseTransformerChannel"/>
-	
-	
+	<int:service-activator input-channel="serviceFacturas" ref="facturaService" method="pagoFactura" output-channel="pagoFacturaTransformerChannel"/>
 	
 	
 	<int:bridge input-channel="partnerEntradas" output-channel="serviceEntradas">
 		<int:poller fixed-delay="1000" />
 	</int:bridge>
+	
+	
+	<int:service-activator input-channel="serviceEntradas" ref="ventaServiceWithBasicAuth" method="ventaEntradas" output-channel="pagoVentaTransformerChannel"/>
+	
+	
 	<int:bridge input-channel="partnerOffline" output-channel="csvOffline">
 		<int:poller fixed-delay="1000" />
 	</int:bridge>
