@@ -3,7 +3,6 @@ package uy.edu.fing.inco.lins.endpoints.Aggregators;
 import java.util.List;
 
 import org.springframework.integration.annotation.Aggregator;
-import org.springframework.integration.annotation.CorrelationStrategy;
 import org.springframework.integration.annotation.MessageEndpoint;
 
 import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
@@ -20,11 +19,6 @@ public class TicketAggregator {
 		ConfirmacionTransaccion ct = new ConfirmacionTransaccion();
 		ct.getConfirmacion().addAll(tickets);
 		return ct;
-	}
-
-	@CorrelationStrategy
-	public long ordenarPor(ConfirmacionPago ticket) {
-		return ticket.getIdentificadorPago();
 	}
 
 }
