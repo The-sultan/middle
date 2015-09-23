@@ -16,7 +16,7 @@ public class PagoToPagoOfflineTransformer {
 	@Transformer(inputChannel="pagoOffline", outputChannel="partnerOffline")
 	public PagoOffline pagoFacturaConverter(PagoMOM pagoMOM) {
 		PagoOffline result = new PagoOffline();
-		result.setIdentificadorCliente(pagoMOM.getIdentificadorPago());
+		result.setIdentificadorCliente(pagoMOM.getIdCliente());
 		result.setCodigoMoneda(pagoMOM.getCodigoMoneda());
 		result.setMonto(pagoMOM.getMonto());
 		result.setFechaCobro(pagoMOM.getFechaPago().toGregorianCalendar().getTime());

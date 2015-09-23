@@ -29,7 +29,6 @@ public class PagoMOM {
     private double monto;
     private String nombreGestion;
     private XMLGregorianCalendar fechaPago;
-    private Long clienteId;
 
     public Long getIdCliente() {
 		return idCliente;
@@ -105,15 +104,6 @@ public class PagoMOM {
 
 	public void setDatoAdicional(List<String> datoAdicional) {
 		this.datoAdicional = datoAdicional;
-	}
-
-	public Long getClienteId() {
-		return clienteId;
-	}
-
-
-	public void setClienteId(Long clienteId) {
-		this.clienteId = clienteId;
 	}
 
 }

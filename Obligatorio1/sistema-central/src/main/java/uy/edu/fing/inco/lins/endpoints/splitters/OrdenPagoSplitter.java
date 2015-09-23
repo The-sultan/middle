@@ -27,7 +27,7 @@ public class OrdenPagoSplitter {
 			pagoMom.setNombreGestion(pago.getNombreGestion());
 			pagoMom.getDatoAdicional().addAll(pago.getDatoAdicional());
 //			ACA ESTA LA CAUSA DE PORQUE PRECISAMOS UN PAGOMOM, la fecha y el cliente debe ir individual por pago
-			pagoMom.setClienteId(orden.getIdentificadorCliente());
+			pagoMom.setIdCliente(orden.getIdentificadorCliente());
 			pagoMom.setFechaPago(orden.getFechaCobro());
 			result.add(pagoMom);
 		}
