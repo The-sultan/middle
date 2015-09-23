@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+	   xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://jax-ws.dev.java.net/spring/core
+       http://jax-ws.java.net/spring/core.xsd
+       http://jax-ws.dev.java.net/spring/servlet
+       http://jax-ws.java.net/spring/servlet.xsd">
+
+	<wss:binding url="/jaxws-spring">
+		<wss:service>
+			<ws:service bean="#myserviceWs"/>
+		</wss:service>
+	</wss:binding>
+
+	<bean id="myserviceWs" class="uy.edu.fing.inco.lins.ws.ServicioRecepcionPagosImpl"/>
+	
+	
+	<bean id="facturaService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="serviceInterface" value="uy.edu.fing.inco.lins.generated.partnerfactura.PagoFacturaEndpoint" />
+		<property name="wsdlDocumentUrl" value="http://localhost:8080/facturas/jaxws-spring?wsdl" />
+		<property name="namespaceUri" value="http://spring.io/guides/gs-producing-web-service" />
+		<property name="serviceName" value="PagoFacturaEndpointService" />
+		<property name="endpointAddress" value="http://localhost:8080/facturas/jaxws-spring" />
+	</bean>
+	
+	<bean id="ventaService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="serviceInterface" value="uy.edu.fing.inco.lins.generated.partnerventa.VentaEntradasEndpoint" />
+		<property name="wsdlDocumentUrl" value="http://localhost:8080/ventas/jaxws-spring?wsdl" />
+		<property name="namespaceUri" value="http://spring.io/guides/gs-producing-web-service" />
+		<property name="serviceName" value="VentaEntradasEndpointService" />
+		<property name="endpointAddress" value="http://localhost:8080/ventas/jaxws-spring" />
+	</bean>
+	
+	<bean id="ventaServiceWithBasicAuth" factory-bean="ventaServiceFactory" factory-method="endpointFactory"/>
+	
+	<import resource="sistema-central.xml"/>
+
+
+</beans>

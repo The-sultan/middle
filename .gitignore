@@ -16,3 +16,9 @@ hs_err_pid*
 **/java/io/spring/guides/gs_producing_web_service/
 /Obligatorio1/partner-1-facturas/target/
 /Obligatorio1/partner-2-entradas/target/
+**/generated/**
+.classpath
+.settings
+.project
+/Obligatorio1/sistema-central/target/
+/Obligatorio1/partner-2-ventas/target/

@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>uy.edu.fing.middleware.obligatorio1</groupId>
-	<artifactId>partner-1-pagos</artifactId>
+	<groupId>uy.edu.fing.middleware.obligatorio1.ws</groupId>
+	<artifactId>partner-2-ventas</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<version>0.0.1</version>
-	<name>partner-1-facturas</name>
+	<name>partner-2-ventas</name>
 
 	<build>
-		<finalName>facturas</finalName>
+		<finalName>ventas</finalName>
 		<plugins>
 			<!-- Plugin para generar el war y que no falle por falta de web.xml-->
 			<plugin>
@@ -35,38 +33,10 @@
 						<scanTarget>target/classes</scanTarget>
 					</scanTargets>
 					<httpConnector>
-						<port>8081</port>
+						<port>8082</port>
 					</httpConnector>
 				</configuration>
 			</plugin>
-			<!-- Plugin para crear automaticamente las clases definidas en el xsd -->
-			<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.6</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.jvnet.jaxb2_commons</groupId>
-						<artifactId>jaxb2-basics</artifactId>
-						<version>0.9.4</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>xjc</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<arguments>-XtoString -Xsetters</arguments>
-							<schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-							<clearOutputDir>false</clearOutputDir>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>  
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -109,7 +79,7 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 </project>
