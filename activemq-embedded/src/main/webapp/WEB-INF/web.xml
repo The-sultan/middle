@@ -9,7 +9,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:broker.xml,
+            classpath:broker.xml
 <!--             classpath:camel-config.xml -->
         </param-value>
     </context-param>
