@@ -28,13 +28,5 @@
 		<property name="endpointAddress" value="http://localhost:8080/facturas/jaxws-spring" />
 	</bean>
 	
-	<bean id="ventaService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
-		<property name="serviceInterface" value="uy.edu.fing.inco.lins.generated.partnerventa.VentaEntradasEndpoint" />
-		<property name="wsdlDocumentUrl" value="http://localhost:8080/ventas/jaxws-spring?wsdl" />
-		<property name="namespaceUri" value="http://spring.io/guides/gs-producing-web-service" />
-		<property name="serviceName" value="VentaEntradasEndpointService" />
-		<property name="endpointAddress" value="http://localhost:8080/ventas/jaxws-spring" />
-	</bean>
-	
 	<bean id="ventaServiceWithBasicAuth" factory-bean="ventaServiceFactory" factory-method="endpointFactory"/>
 </beans>

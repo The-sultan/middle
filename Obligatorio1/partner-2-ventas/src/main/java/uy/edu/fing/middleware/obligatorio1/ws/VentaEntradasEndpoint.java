@@ -15,7 +15,6 @@ import uy.edu.fing.middleware.obligatorio1.ws.domain.VentaEntradasRequest;
 import uy.edu.fing.middleware.obligatorio1.ws.domain.VentaEntradasResult;
 
 import uy.edu.fing.middleware.obligatorio1.ws.exceptions.CantidadInsuficienteEntradas;
-import uy.edu.fing.middleware.obligatorio1.ws.exceptions.LoginIncorrecto;
 import uy.edu.fing.middleware.obligatorio1.ws.exceptions.MonedaNoEncontrada;
 
 
@@ -32,13 +31,28 @@ public class VentaEntradasEndpoint {
 
     @WebMethod
     public  VentaEntradasResult ventaEntradas(@XmlElement(required=true) VentaEntradasRequest ventaEntradas) 
-            throws LoginIncorrecto,MonedaNoEncontrada, CantidadInsuficienteEntradas{
+            throws MonedaNoEncontrada, CantidadInsuficienteEntradas{
        
     	
     	date = new Date();
         String requestMsg = String.format("cantEntradas: %d, monedaID: %s, monto: %s, fecha: %s",ventaEntradas.getCantEntradas(),
                 ventaEntradas.getMonedaID(), NumberFormat.getCurrencyInstance().format(ventaEntradas.getMonto()), ventaEntradas.getFecha() == null ? "" : ventaEntradas.getFecha().toString());
         log.add(date + ": -->" + requestMsg);
+        String msg = "";
+        if(ventaEntradas.getMonedaID().equals("854") && ventaEntradas.getMonedaID().equals("840")){
+            msg = "Moneda no encontrada";
+            log.add(date + ": -->" + msg);
+            throw new MonedaNoEncontrada(msg);
+        }
+        
+        //TODO ver que hacemos con el control de la cantidad de entradas 
+        if (ventaEntradas.getCantEntradas() > 10){
+        	msg = "Cantidad no disponible. Maximo disponible : " + 10;
+            log.add(date + ": -->" + msg);
+            throw new CantidadInsuficienteEntradas(msg);
+        }
+        
+        
         VentaEntradasResult respuesta = new VentaEntradasResult();
         List<String> codigosEntradas = new ArrayList<>();
         for (int i = 0 ; i<ventaEntradas.getCantEntradas() ; i ++ ) {
