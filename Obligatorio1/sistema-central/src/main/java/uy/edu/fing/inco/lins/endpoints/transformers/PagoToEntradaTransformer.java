@@ -18,16 +18,18 @@ public class PagoToEntradaTransformer {
 		VentaEntradasRequest result = new VentaEntradasRequest();
 		result.setCantEntradas(Short.parseShort(pagoMOM.getDatoAdicional().get(0)));
 		result.setFecha(pagoMOM.getFechaPago());
-		if (null != pagoMOM.getCodigoMoneda()) switch (pagoMOM.getCodigoMoneda()) {
-            case "UYU":
-                result.setMonedaID("854");
-                break;
-            case "USD":
-                result.setMonedaID("840");
-                break;
-            default:
-                throw new RuntimeException();
-        }
+		if (null != pagoMOM.getCodigoMoneda()) {
+			switch (pagoMOM.getCodigoMoneda()) {
+	            case "UYU":
+	                result.setMonedaID("854");
+	                break;
+	            case "USD":
+	                result.setMonedaID("840");
+	                break;
+	            default:
+	                throw new RuntimeException();
+	        }
+		}
 		result.setMonto(new BigDecimal(pagoMOM.getMonto()));
 		return result;
 	}

@@ -10,6 +10,8 @@
        http://jax-ws.dev.java.net/spring/servlet
        http://jax-ws.java.net/spring/servlet.xsd">
 
+    <import resource="sistema-central.xml"/>
+    
 	<wss:binding url="/jaxws-spring">
 		<wss:service>
 			<ws:service bean="#myserviceWs"/>
@@ -17,7 +19,6 @@
 	</wss:binding>
 
 	<bean id="myserviceWs" class="uy.edu.fing.inco.lins.ws.ServicioRecepcionPagosImpl"/>
-	
 	
 	<bean id="facturaService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
 		<property name="serviceInterface" value="uy.edu.fing.inco.lins.generated.partnerfactura.PagoFacturaEndpoint" />
@@ -36,8 +37,4 @@
 	</bean>
 	
 	<bean id="ventaServiceWithBasicAuth" factory-bean="ventaServiceFactory" factory-method="endpointFactory"/>
-	
-	<import resource="sistema-central.xml"/>
-
-
 </beans>
