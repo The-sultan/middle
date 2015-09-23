@@ -12,7 +12,11 @@
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	    <spring.version>4.1.6.RELEASE</spring.version>
+	    <activemq.version>5.7.0</activemq.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
@@ -83,6 +87,19 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.9</version>
 		</dependency>
+		
+		<!-- ActiveMQ Artifacts -->
+	    <dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-spring</artifactId>
+		    <version>${activemq.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>javax.annotation</groupId>
+	        <artifactId>jsr250-api</artifactId>
+	        <version>1.0</version>
+	    </dependency>
 	</dependencies>
 	<build>
 		<finalName>central</finalName>

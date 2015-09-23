@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns:int="http://www.springframework.org/schema/integration"
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
 	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/integration
-		http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
-		http://www.springframework.org/schema/integration/stream
-		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
-		http://www.springframework.org/schema/integration/jms
-        http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
+		http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
 
+    <import resource="activemq.xml"/>
+  
 	<int:annotation-config />
 	
 	<context:component-scan base-package="uy.edu.fing.inco.lins" />
@@ -68,7 +67,12 @@
     <!-- ============================================= -->
     <!-- Envio de notificaciones al sistema de lealtad -->
     <!-- ============================================= -->
-    <int:channel id="lealtadChannel" />
     
-    <int-jms:outbound-channel-adapter id="lealtadOut" destination="queue.lealtad" channel="lealtadChannel"/>
+    <int:channel id="lealtadChannel"/>
+    <int:channel id="lealtadSerializerChannel"/>
+    <int:channel id="lealtadJmsChannel"/>
+    
+    <int:payload-serializing-transformer input-channel="lealtadSerializerChannel" output-channel="lealtadJmsChannel"/>
+    
+    <int-jms:outbound-channel-adapter id="lealtadOut" destination-name="queue.lealtad" connection-factory="amqConnectionFactory" channel="lealtadJmsChannel"/>
 </beans:beans>

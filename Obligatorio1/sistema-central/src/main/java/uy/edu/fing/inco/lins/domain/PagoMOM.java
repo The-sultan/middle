@@ -42,6 +42,10 @@ public class PagoMOM {
         return codigoMoneda;
     }
 
+    public void setCodigoMoneda(String value) {
+        this.codigoMoneda = value;
+    }
+
 	public Long getNroSucursal() {
 		return nroSucursal;
 	}
@@ -58,10 +62,6 @@ public class PagoMOM {
 		this.formaPago = formaPago;
 	}
 	
-    public void setCodigoMoneda(String value) {
-        this.codigoMoneda = value;
-    }
-
     public List<String> getDatoAdicional() {
         if (datoAdicional == null) {
             datoAdicional = new ArrayList<String>();

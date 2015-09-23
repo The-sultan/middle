@@ -10,7 +10,7 @@ import uy.edu.fing.inco.lins.generated.ConfirmacionPago;
 @Component
 public class PagoOkFilter {
     
-    @Filter(inputChannel = "ticketChannel", outputChannel="jmsChannel")
+    @Filter(inputChannel = "ticketChannel", outputChannel="lealtadChannel")
     public boolean pagoEstaOk(ConfirmacionPago pago){
         return pago.getResultado().equals("OK");
     }

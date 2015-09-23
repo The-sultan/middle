@@ -16,11 +16,13 @@ public class ToHeaderTransformer {
     @Transformer(inputChannel = "pagoIndividual", outputChannel = "pagoIndividualEnriched")
     public Message<PagoMOM> toHeader(Message<PagoMOM> request){
         Map<String,Object> headers = new HashMap<>(request.getHeaders());
-        headers.put("moneda",request.getPayload().getCodigoMoneda());
-        headers.put("monto",request.getPayload().getMonto());
-        headers.put("fecha",request.getPayload().getFechaPago());
-        headers.put("idPago",request.getPayload().getIdentificadorPago());
-        GenericMessage<PagoMOM> response = new GenericMessage<>(request.getPayload(),headers);
+        PagoMOM pago = request.getPayload();
+        headers.put("cliente", pago.getIdCliente());
+        headers.put("moneda", pago.getCodigoMoneda());
+        headers.put("monto", pago.getMonto());
+        headers.put("fecha", pago.getFechaPago());
+        headers.put("idPago", pago.getIdentificadorPago());
+        GenericMessage<PagoMOM> response = new GenericMessage<>(pago, headers);
         return response;
     }
 }

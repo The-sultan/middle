@@ -1,14 +1,14 @@
 
 package uy.edu.fing.inco.lins.domain;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
 
 public class DatosLealtad {
 
 	private Long idCliente;
     private String codigoMoneda;
-    private double monto;
-    private XMLGregorianCalendar fechaHoraCobro;
+    private Double monto;
+    private Date fechaHoraCobro;
 
     public Long getIdCliente() {
 		return idCliente;
@@ -26,20 +26,20 @@ public class DatosLealtad {
         this.codigoMoneda = value;
     }
 
-    public double getMonto() {
+    public Double getMonto() {
         return monto;
     }
 
-    public void setMonto(double value) {
+    public void setMonto(Double value) {
         this.monto = value;
     }
     
-    public XMLGregorianCalendar getFechaHoraCobro() {
+    public Date getFechaHoraCobro() {
 		return fechaHoraCobro;
 	}
 
 
-	public void setFechaHoraCobro(XMLGregorianCalendar fechaHoraCobro) {
+	public void setFechaHoraCobro(Date fechaHoraCobro) {
 		this.fechaHoraCobro = fechaHoraCobro;
 	}
 }
