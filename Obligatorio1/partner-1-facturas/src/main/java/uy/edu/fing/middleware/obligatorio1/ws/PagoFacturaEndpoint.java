@@ -41,12 +41,12 @@ public class PagoFacturaEndpoint {
             log.add(date + ": -->" + msg);
             throw new MonedaNoEncontrada(msg);
         }
-        if(request.getFacturaID()!= 666 ){
+        if(request.getFacturaID()== 10 ){
             msg = "Factura no encontrada";
             log.add(date + ": -->" + msg);
             throw new FacturaNoEncontrada(msg);
         }
-        Integer response = 1942;
+        Integer response = Double.valueOf(Math.random()*100).intValue();
         log.add(date + ": -->" + response);
         return response;
 	}

@@ -1,4 +1,4 @@
-package uy.edu.fing.inco.lins.endpoints.splitters.routers;
+package uy.edu.fing.inco.lins.endpoints.routers;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
@@ -10,7 +10,7 @@ import uy.edu.fing.inco.lins.domain.PagoMOM;
 @MessageEndpoint
 public class PagoRouter {
 
-	@Router(inputChannel="pagoIndividual")
+	@Router(inputChannel="pagoIndividualEnriched")
 	public String resolveOrderItemChannel(PagoMOM pagoItem) {
 		switch(pagoItem.getNombreGestion()) {
  			case "Entradas":
