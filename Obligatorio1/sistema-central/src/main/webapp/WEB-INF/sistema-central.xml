@@ -60,7 +60,9 @@
 	<int:bridge input-channel="partnerOffline" output-channel="csvOffline">
 		<int:poller fixed-delay="1000" />
 	</int:bridge>
-	<!-- Canal unico de respuesta a la sucursal que emitio el pago -->
+	
+	<int:service-activator input-channel="csvOffline" ref="offlineServiceActivator" method="callService" output-channel="ticketChannel"/>
+		<!-- Canal unico de respuesta a la sucursal que emitio el pago -->
 	<int:channel id="responseChannel" />
 
 
