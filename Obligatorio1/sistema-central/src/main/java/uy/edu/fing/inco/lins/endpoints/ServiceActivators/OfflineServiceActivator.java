@@ -68,7 +68,7 @@ public class OfflineServiceActivator extends AbstractServiceActivator<VentaEntra
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyhhmmss");
 		if (OS.indexOf("win") >= 0) {
 			// para los que corran en WIN no se les rompa nada
-			filePath = "C://middleware-" + sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
+			filePath = "C:\\middleware-" + sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
 		} else {
 			filePath = System.getProperty("user.home") + File.separator + "middleware-"
 					+ sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
