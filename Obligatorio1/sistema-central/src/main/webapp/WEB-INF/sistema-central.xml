@@ -74,7 +74,7 @@
     <int:channel id="lealtadSerializerChannel"/>
     <int:channel id="lealtadJmsChannel"/>
     
-    <int:payload-serializing-transformer input-channel="lealtadSerializerChannel" output-channel="lealtadJmsChannel"/>
+    <int:object-to-json-transformer input-channel="lealtadSerializerChannel" output-channel="lealtadJmsChannel"/>
     
     <int-jms:outbound-channel-adapter id="lealtadOut" destination-name="queue.lealtad" connection-factory="amqConnectionFactory" channel="lealtadJmsChannel"/>
 </beans:beans>
