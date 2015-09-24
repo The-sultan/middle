@@ -105,4 +105,5 @@ public class PagoMOM {
 	public void setDatoAdicional(List<String> datoAdicional) {
 		this.datoAdicional = datoAdicional;
 	}
+
 }
