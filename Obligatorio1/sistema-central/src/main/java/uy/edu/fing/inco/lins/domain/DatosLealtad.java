@@ -1,10 +1,16 @@
 
 package uy.edu.fing.inco.lins.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DatosLealtad {
+public class DatosLealtad implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3184941886919403206L;
+	
 	private Long idCliente;
     private String codigoMoneda;
     private Double monto;
