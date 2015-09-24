@@ -29,18 +29,9 @@ public class OfflineServiceActivator extends AbstractServiceActivator<VentaEntra
 
 		ConfirmacionPago confirmacionPago = new ConfirmacionPago();
 		ICsvBeanWriter beanWriter = null;
-		String OS = System.getProperty("os.name").toLowerCase();
-		String filePath = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyhhmmss");
-		if (OS.indexOf("win") >= 0) {
-			// para los que corran en WIN no se les rompa nada
-			filePath = "C://middleware-" + sdf.format(pagoOffline.getHoraCobro()) + ".csv";
-		} else {
-			filePath = System.getProperty("user.home") + File.separator + "middleware-"
-					+ sdf.format(pagoOffline.getHoraCobro()) + ".csv";
-		}
 		
-		beanWriter = new CsvBeanWriter(new FileWriter(filePath),CsvPreference.STANDARD_PREFERENCE );
+		
+		beanWriter = new CsvBeanWriter(new FileWriter(getFileName(pagoOffline)),CsvPreference.STANDARD_PREFERENCE );
 		
 		String[] headers = getCSVHeaders();
 
@@ -68,6 +59,28 @@ public class OfflineServiceActivator extends AbstractServiceActivator<VentaEntra
 
 		return new String[] { "identificadorCliente", "codigoMoneda", "monto", "fechaCobro", "horaCobro" };
 
+	}
+	
+	private String getFileName(PagoOffline pagoOffline) {
+		int index = 1;
+		String OS = System.getProperty("os.name").toLowerCase();
+		String filePath = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyhhmmss");
+		if (OS.indexOf("win") >= 0) {
+			// para los que corran en WIN no se les rompa nada
+			filePath = "C://middleware-" + sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
+		} else {
+			filePath = System.getProperty("user.home") + File.separator + "middleware-"
+					+ sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
+		}
+		while(true){
+			File f = new File(String.format(filePath, index));
+			if (!f.exists()) {
+				break;
+			}
+			index++;
+		}
+		return String.format(filePath, index);
 	}
 
 }
