@@ -30,12 +30,14 @@ public class DefaultMessageListener implements MessageListener {
 		    } catch (Exception ex) {
 //		      LOG.error("Failed to process message due to: " + e + ". Message: "+ message,e);
 		    	System.out.println("Failed to process message due to: " + ex + ". Message: "+ msg);
+		    	return;
 		    }
 		} else {
 //		    LOG.warn("Ignoring invalid message: " + message);
 			 System.out.println("Ignoring invalid message: " + msg);
 		}
 		
+		// If no error send ACK for removing message from queue
 		try {
 			msg.acknowledge();
 		} catch (JMSException e) {

@@ -14,5 +14,6 @@
   <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
     <!-- brokerURL, You may have different IP or port -->
     <constructor-arg index="0" value="tcp://localhost:61616"/>
+<!--     <constructor-arg index="0" value="vm://amq-broker"/> -->
   </bean>
 </beans>

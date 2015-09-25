@@ -23,7 +23,7 @@ public class LealtadConsumerService {
 	public void start() throws JMSException {
 		
 		conn = connFactory.createQueueConnection();
-		Session session = conn.createSession(true, 0);
+		Session session = conn.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 		
 		Queue queue = new ActiveMQQueue(QUEUE_NAME + "?consumer.exclusive=true&consumer.dispatchAsync=true&consumer.prefetchSize=10");
 		MessageConsumer consumer = session.createConsumer(queue);
