@@ -48,7 +48,7 @@ public class OfflineServiceActivator extends AbstractServiceActivator<VentaEntra
 				new NotNull(), // moneda
 				new NotNull(), // monto
 				new FmtDate("ddMMyy"), // diaCobro
-				new FmtDate("hhmmss"), // horaCobro
+				new FmtDate("HHmmss"), // horaCobro
 
 		};
 
@@ -65,7 +65,7 @@ public class OfflineServiceActivator extends AbstractServiceActivator<VentaEntra
 		int index = 1;
 		String OS = System.getProperty("os.name").toLowerCase();
 		String filePath = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyhhmmss");
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
 		if (OS.indexOf("win") >= 0) {
 			// para los que corran en WIN no se les rompa nada
 			filePath = "C:\\middleware-" + sdf.format(pagoOffline.getHoraCobro()) + "-%d.csv";
