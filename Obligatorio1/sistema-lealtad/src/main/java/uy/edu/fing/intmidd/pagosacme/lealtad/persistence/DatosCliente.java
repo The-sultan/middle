@@ -29,6 +29,7 @@ public class DatosCliente {
 		private Date fechaHoraPago;
 		private Double monto;
 		private CodigoMoneda codigoMoneda;
+		private long puntosGenerados;
 		 
 		public Date getFechaHoraPago() {
 			return fechaHoraPago;
@@ -49,6 +50,13 @@ public class DatosCliente {
 		}
 		public void setCodigoMoneda(CodigoMoneda codigoMoneda) {
 			this.codigoMoneda = codigoMoneda;
+		}
+		
+		public long getPuntosGenerados() {
+			return puntosGenerados;
+		}
+		public void setPuntosGenerados(long puntosGenerados) {
+			this.puntosGenerados = puntosGenerados;
 		}
 	 }
 	 
@@ -80,8 +88,10 @@ public class DatosCliente {
 		he.setFechaHoraPago(dl.getFechaHoraCobro());
 		he.setMonto(dl.getMonto());
 		he.setCodigoMoneda(Enum.valueOf(CodigoMoneda.class, dl.getCodigoMoneda()));
+		long puntosGenerados = Math.round(dl.getMonto() * he.getCodigoMoneda().tasaPuntos);
+		he.setPuntosGenerados(puntosGenerados);
 		historial.add(he);
 		
-		puntosAcumulados += dl.getMonto() * he.getCodigoMoneda().tasaPuntos;
+		puntosAcumulados += puntosGenerados;
 	}
 }

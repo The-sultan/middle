@@ -7,12 +7,20 @@ pageEncoding="ISO-8859-1"%>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Spring 4 MVC - HelloWorld Index Page</title>
   </head>
-  <body> 
-    <center>
-      <h2>Hello World</h2>
-      <h3>
-        <a href="hello?name=Eric">Click Here</a>
-      </h3>
-    </center>
+
+  <body>
+    <form action="puntos">
+      <div style="text-align:center">
+        <h2>Sistema de Lealtad</h2>
+        Número de Cliente: <input type="text" name="idCliente"><br>
+        <br>
+        <input type="submit" value="Consultar" align="right">
+      </div>
+    </form>
+
+    <div style="text-align:center">
+      <p><i>Ingrese el número de cliente y pulse el botón consultar para ver puntos acumulados e historial de   pagos.</i></p>
+    </div>
   </body>
 </html>
+

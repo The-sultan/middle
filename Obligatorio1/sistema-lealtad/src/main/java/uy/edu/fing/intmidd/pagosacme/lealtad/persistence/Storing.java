@@ -26,4 +26,8 @@ public class Storing {
 		
 		dc.agregar(dl);
 	}
+	
+	public synchronized static DatosCliente obtener(Long idCliente) {
+		return clientes.get(idCliente);
+	}
 }

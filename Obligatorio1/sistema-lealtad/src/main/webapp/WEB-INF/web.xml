@@ -5,6 +5,10 @@
  
   <display-name>Modulo-Lealtad</display-name>
     
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
   <!-- location of spring XML files -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -20,15 +24,15 @@
   
   <servlet>
     <servlet-name>dispatcher</servlet-name>
-      <servlet-class>
-        org.springframework.web.servlet.DispatcherServlet
-      </servlet-class>
+	<servlet-class>
+	  org.springframework.web.servlet.DispatcherServlet
+	</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
  
-<!--   <servlet-mapping> -->
-<!--     <servlet-name>dispatcher</servlet-name> -->
-<!--     <url-pattern>/</url-pattern> -->
-<!--   </servlet-mapping> -->
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/puntos</url-pattern>
+  </servlet-mapping>
     
 </web-app>
