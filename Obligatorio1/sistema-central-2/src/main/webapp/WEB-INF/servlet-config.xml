@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd 
+		http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
+		http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	   xmlns:int="http://www.springframework.org/schema/integration"
+	   xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	   xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	   xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+	   xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	   xmlns:int-ws="http://www.springframework.org/schema/integration/ws"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:context="http://www.springframework.org/schema/context">
+	
+	<int-http:inbound-gateway id="InboundGateway"
+							  request-channel="entrada" reply-channel="salida" 
+							  supported-methods="POST" reply-timeout="5000" 
+							  path="/receiveGateway"/>
+
+	<int:channel id="entrada" />
+	
+	<!-- En esta cadena, se guarda en headers informacion necesaria	-->	
+	<!-- y se hace split y routing de los mensajes.					-->
+	<int:chain input-channel="entrada">
+
+		<!--Guardo id cliente en el header-->
+		<int-xml:xpath-header-enricher>
+			<int-xml:header name="cliente" xpath-expression="//identificadorCliente"/>
+		</int-xml:xpath-header-enricher>
+
+		<!--Guardo fecha en el header-->
+		<int:header-enricher>
+			<int:header name="fecha" expression="@dates.parse(#xpath(payload,'//arg0/fechaCobro'))" />
+		</int:header-enricher>
+
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/pagosTransform.xsl"/>
+		<!--Split de los pagos-->
+		<int-xml:xpath-splitter id="pagosSplitter" create-documents="true">
+			<int-xml:xpath-expression expression="/payload/pagos"/>
+		</int-xml:xpath-splitter>
+
+		<!--Guardo moneda de pago en el header-->
+		<int-xml:xpath-header-enricher>
+			<int-xml:header name="moneda" xpath-expression="/pagos/codigoMoneda"/>
+		</int-xml:xpath-header-enricher>
+		
+		<!--Guardo monto de pago en el header-->
+		<int-xml:xpath-header-enricher>
+			<int-xml:header name="monto" xpath-expression="/pagos/monto"/>
+		</int-xml:xpath-header-enricher>
+
+		<!--Guardo id de pago en el header-->
+		<int-xml:xpath-header-enricher>
+			<int-xml:header name="pago" xpath-expression="/pagos/identificadorPago"/>
+		</int-xml:xpath-header-enricher>
+		
+
+		<!-- route the order to all responders-->
+		<int-xml:xpath-router>
+			<int-xml:xpath-expression expression="/pagos/nombreGestion"/>
+			<int-xml:mapping value="Factura" channel="facturaChannel"/>
+			<int-xml:mapping value="Entradas" channel="entradasChannel"/>
+			<int-xml:mapping value="Offline" channel="offlineChannel"/>
+		</int-xml:xpath-router>
+
+
+		
+	</int:chain>
+	
+	
+	<!--En esta cadena se resuelve una de las posibles rutas, la de las facutas-->
+	<int:chain input-channel="facturaChannel" output-channel="aggregatorChannel">
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/facturaTransform.xsl"/>
+		
+		
+		<int:header-enricher>
+			<int:header name="Content-Type" value="text/xml"/>
+		</int:header-enricher> 
+
+		<int-http:outbound-gateway
+			url="http://localhost:8080/facturas/jaxws-spring" 
+			http-method="POST" expected-response-type="java.lang.String"/>
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/confirmacionFactura.xsl" xslt-param-headers="pago"/>		 
+	</int:chain>
+	
+	
+	<!--En esta cadena se resuelve otra ruta, la de las entradas-->
+	<int:chain input-channel="entradasChannel" output-channel="aggregatorChannel">
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/entradaTransform.xsl"/>
+		<int:header-enricher>
+			<int:header name="Content-Type" value="text/xml"/>
+		</int:header-enricher> 
+		<int:header-enricher>
+			<int:header name="Authorization" value="Basic dmVudGFzOnZlbnRhcw=="/>
+		</int:header-enricher> 
+		<int-http:outbound-gateway
+			url="http://localhost:8080/ventas/jaxws-spring" 
+			http-method="POST" expected-response-type="java.lang.String"/>
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/confirmacionEntradas.xsl" xslt-param-headers="pago"/>		 
+	</int:chain>
+	
+	
+	<int:publish-subscribe-channel id="offlineChannel"/>
+	
+	<!--En esta cadena se resuelve la ruta de los archivos offline-->
+	<int:chain input-channel="offlineChannel">
+		<int:transformer expression="'identificadorCliente, codigoMoneda, monto, fechaCobro, horaCobro' + T(System).getProperty('line.separator') + 
+									headers['pago'] + ',' + #xpath(payload, '/pagos/codigoMoneda', 'string') + ',' + headers['monto'] + ',' +  
+									#formatDate(headers['fecha'], 'yyyy-MM-dd') + ',' +  #formatDate(headers['fecha'], 'HH:mm')"  />
+
+		<int-file:outbound-gateway directory="c:\uploads" 
+							   filename-generator-expression="'middleware' + #formatDate(headers['fecha'],'yyyy-MM-dd HH-mm')
+																+ headers['pago'] + '.csv'"/>
+	</int:chain>
+	
+	
+	<!--Usando un transformer se crea el payload estandarizado para el aggregator (para el caso offline)-->
+	<int-xml:xslt-transformer xsl-resource="/WEB-INF/confirmacionCsv.xsl" input-channel="offlineChannel" output-channel="aggregatorChannel" />
+	
+	
+	<!--Por ultimo se agregan los resultados a un unico resultado final-->
+	<!--El cual es transformado a un mensaje soap-->
+	<int:chain input-channel="aggregatorChannel" output-channel="salida">
+		<int:aggregator 
+			expression=" '&lt;root&gt;' + T(String).join('',#this.![payload]) + '&lt;/root&gt;'"/>
+		<int-xml:xslt-transformer xsl-resource="/WEB-INF/confirmacionesTransform.xsl"/>
+	</int:chain>
+	
+	<int:channel id="salida"/>
+
+	
+	<int:spel-function id="formatDate" 
+					   class="org.apache.commons.lang3.time.DateFormatUtils" 
+					   method="format(java.util.Date, java.lang.String)"/>
+	
+	
+	<bean class="java.text.SimpleDateFormat" id="dates">
+		<constructor-arg value="yyyy-MM-dd'T'hh:MM:ss" />
+	</bean>
+	
+
+</beans>
+	
