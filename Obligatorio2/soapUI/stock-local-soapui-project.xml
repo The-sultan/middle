@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="5c34cb04-4de7-4629-93d2-25f975dfaa92" activeEnvironment="Default" name="SOAP-Stock_Local" soapui-version="5.2.0" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="5bf462a3-1346-4f49-b579-75129f2b6c4b" wsaVersion="NONE" name="StockLocalServiceSoapBinding" type="wsdl" bindingName="{http://interfaces.obligatorio2.middleware.fing.edu.uy/}StockLocalServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/stockLocal/services/stock_local?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/stockLocal/services/stock_local?wsdl"><con:part><con:url>http://localhost:8080/stockLocal/services/stock_local?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="StockLocalService" targetNamespace="http://interfaces.obligatorio2.middleware.fing.edu.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://interfaces.obligatorio2.middleware.fing.edu.uy/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://interfaces.obligatorio2.middleware.fing.edu.uy/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="anularReserva" type="tns:anularReserva"/>
+      <xs:element name="anularReservaResponse" type="tns:anularReservaResponse"/>
+      <xs:element name="reservaProductos" type="tns:reservaProductos"/>
+      <xs:element name="reservaProductosResponse" type="tns:reservaProductosResponse"/>
+      <xs:element name="stockLocalLog" type="tns:stockLocalLog"/>
+      <xs:element name="stockLocalLogResponse" type="tns:stockLocalLogResponse"/>
+      <xs:complexType name="reservaProductos">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="tns:datoReserva"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="datoReserva">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cantidad" type="xs:int"/>
+          <xs:element minOccurs="0" name="idProducto" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reservaProductosResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:datoSalida"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="datoSalida">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+          <xs:element minOccurs="0" name="descripcion" type="xs:string"/>
+          <xs:element minOccurs="0" name="idReserva" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anularReserva">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anularReservaResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:datoSalida"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="stockLocalLog">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="stockLocalLogResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Exception" type="tns:Exception"/>
+      <xs:complexType name="Exception">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="reservaProductos">
+    <wsdl:part element="tns:reservaProductos" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stockLocalLogResponse">
+    <wsdl:part element="tns:stockLocalLogResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stockLocalLog">
+    <wsdl:part element="tns:stockLocalLog" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservaProductosResponse">
+    <wsdl:part element="tns:reservaProductosResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Exception">
+    <wsdl:part element="tns:Exception" name="Exception"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="anularReservaResponse">
+    <wsdl:part element="tns:anularReservaResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="anularReserva">
+    <wsdl:part element="tns:anularReserva" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="StockLocal">
+    <wsdl:operation name="reservaProductos">
+      <wsdl:input message="tns:reservaProductos" name="reservaProductos"></wsdl:input>
+      <wsdl:output message="tns:reservaProductosResponse" name="reservaProductosResponse"></wsdl:output>
+      <wsdl:fault message="tns:Exception" name="Exception"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="anularReserva">
+      <wsdl:input message="tns:anularReserva" name="anularReserva"></wsdl:input>
+      <wsdl:output message="tns:anularReservaResponse" name="anularReservaResponse"></wsdl:output>
+      <wsdl:fault message="tns:Exception" name="Exception"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="stockLocalLog">
+      <wsdl:input message="tns:stockLocalLog" name="stockLocalLog"></wsdl:input>
+      <wsdl:output message="tns:stockLocalLogResponse" name="stockLocalLogResponse"></wsdl:output>
+      <wsdl:fault message="tns:Exception" name="Exception"></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="StockLocalServiceSoapBinding" type="tns:StockLocal">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="reservaProductos">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservaProductos">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservaProductosResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Exception">
+        <soap:fault name="Exception" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="anularReserva">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="anularReserva">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="anularReservaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Exception">
+        <soap:fault name="Exception" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="stockLocalLog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="stockLocalLog">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="stockLocalLogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Exception">
+        <soap:fault name="Exception" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StockLocalService">
+    <wsdl:port binding="tns:StockLocalServiceSoapBinding" name="StockLocalPort">
+      <soap:address location="http://localhost:8080/stockLocal/services/stock_local"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/stockLocal/services/stock_local</con:endpoint></con:endpoints><con:operation id="a46e1962-9f92-42b7-af2a-7b2c44872281" isOneWay="false" action="" name="anularReserva" bindingOperationName="anularReserva" type="Request-Response" outputName="anularReservaResponse" inputName="anularReserva" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b9053449-5412-4617-94c7-1da0d79d71cb" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/stockLocal/services/stock_local</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:anularReserva>\r
+         <!--Optional:-->\r
+         <arg0>?</arg0>\r
+      </int:anularReserva>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.obligatorio2.middleware.fing.edu.uy/StockLocal/anularReserva"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="06dcf0ab-7ce6-4498-8fbe-f363ddc7122c" isOneWay="false" action="" name="reservaProductos" bindingOperationName="reservaProductos" type="Request-Response" outputName="reservaProductosResponse" inputName="reservaProductos" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3bc48b00-f50f-48b7-a0db-cfd9d13759c0" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/stockLocal/services/stock_local</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:reservaProductos>\r
+         <!--Zero or more repetitions:-->\r
+         <arg0>\r
+            <!--Optional:-->\r
+            <cantidad>5</cantidad>\r
+            <!--Optional:-->\r
+            <idProducto>3</idProducto>\r
+         </arg0>\r
+          <arg0>
+            <!--Optional:-->
+            <cantidad>7</cantidad>
+            <!--Optional:-->
+            <idProducto>23</idProducto>
+         </arg0>
+
+      </int:reservaProductos>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.obligatorio2.middleware.fing.edu.uy/StockLocal/reservaProductos"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="aed73735-0c0f-45b3-8c74-d659f6235557" isOneWay="false" action="" name="stockLocalLog" bindingOperationName="stockLocalLog" type="Request-Response" outputName="stockLocalLogResponse" inputName="stockLocalLog" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="44e837b4-20ee-45f7-9c2f-8e479bd1eaa4" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/stockLocal/services/stock_local</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:stockLocalLog/>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.obligatorio2.middleware.fing.edu.uy/StockLocal/stockLocalLog"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
