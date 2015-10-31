@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="a2b1f951-a560-42e7-b85f-669aad8d81e5" activeEnvironment="Default" name="SOAP-SistemaCentral" resourceRoot="" soapui-version="5.2.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="3f57b312-3952-4996-ae98-b90bbc4f86b4" wsaVersion="NONE" name="CompraServiceServiceSoapBinding" type="wsdl" bindingName="{http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/}CompraServiceServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/compra?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/compra?wsdl"><con:part><con:url>http://localhost:8081/compra?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="CompraServiceService" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="compra" type="tns:compra"/>
+      <xs:element name="compraResponse" type="tns:compraResponse"/>
+      <xs:complexType name="compra">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="tns:orden"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orden">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+          <xs:element minOccurs="0" name="nroTarjeta" type="xs:long"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="productos" nillable="true" type="tns:item"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="item">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cantidad" type="xs:int"/>
+          <xs:element minOccurs="0" name="idProducto" type="xs:long"/>
+          <xs:element minOccurs="0" name="precioUnitario" type="xs:double"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="compraResponse">
+        <xs:sequence/>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="compraResponse">
+    <wsdl:part element="tns:compraResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="compra">
+    <wsdl:part element="tns:compra" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CompraService">
+    <wsdl:operation name="compra">
+      <wsdl:input message="tns:compra" name="compra"></wsdl:input>
+      <wsdl:output message="tns:compraResponse" name="compraResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CompraServiceServiceSoapBinding" type="tns:CompraService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="compra">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="compra">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CompraServiceService">
+    <wsdl:port binding="tns:CompraServiceServiceSoapBinding" name="CompraServicePort">
+      <soap:address location="http://localhost:8081/compra"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8081/compra</con:endpoint></con:endpoints><con:operation id="cf98d64a-d693-4bd3-9187-056f3038e26b" isOneWay="false" action="" name="compra" bindingOperationName="compra" type="Request-Response" outputName="compraResponse" inputName="compra" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d59d3c3f-8967-4190-9c57-3b6385315127" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8081/compra</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:compra>\r
+         <!--Optional:-->\r
+         <arg0>\r
+            <!--Optional:-->\r
+            <idCompra>423456</idCompra>\r
+            <!--Optional:-->\r
+            <nroTarjeta>456464646</nroTarjeta>\r
+            <!--Zero or more repetitions:-->\r
+            <productos>\r
+               <!--Optional:-->\r
+               <cantidad>5</cantidad>\r
+               <!--Optional:-->\r
+               <idProducto>12</idProducto>\r
+               <!--Optional:-->\r
+               <precioUnitario>100</precioUnitario>\r
+            </productos>\r
+            <productos>
+               <!--Optional:-->
+               <cantidad>45</cantidad>
+               <!--Optional:-->
+               <idProducto>123</idProducto>
+               <!--Optional:-->
+               <precioUnitario>1001</precioUnitario>
+            </productos>
+
+         </arg0>\r
+      </int:compra>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compra"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
