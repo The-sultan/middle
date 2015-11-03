@@ -14,5 +14,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <http:listener config-ref="HTTP_Listener_Configuration" path="/compra" doc:name="HTTP"/>
         <logger message=".#[message.inboundProperties.'http.request.path']" level="INFO" doc:name="Logger"/>
         <cxf:jaxws-service doc:name="CXF-COMPRAService"  serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService"/>
+        <component class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CompraServiceImpl" doc:name="Java"/>
     </flow>
 </mule>
