@@ -7,18 +7,12 @@
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration">
+     <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration">
         <http:worker-threading-profile poolExhaustedAction="WAIT"/>
     </http:listener-config>
     <flow name="sistemaCentralPagosFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/compra" doc:name="HTTP"/>
         <logger message=".#[message.inboundProperties.'http.request.path']" level="INFO" doc:name="Logger"/>
-        <response>
-            <logger message=".#[message.outboundProperties]" level="INFO" doc:name="Logger"/>
-        </response>
-        <response>
-            <cxf:jaxws-service serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService" doc:name="CXF"/>
-            <component class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CompraServiceImpl" doc:name="Java"/>
-        </response>
+        <cxf:jaxws-service doc:name="CXF-COMPRAService"  serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService"/>
     </flow>
 </mule>
