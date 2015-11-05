@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-     <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration">
-        <http:worker-threading-profile poolExhaustedAction="WAIT"/>
-    </http:listener-config>
-    <flow name="sistemaCentralPagosFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/compra" doc:name="HTTP"/>
-        <logger message=".#[message.inboundProperties.'http.request.path']" level="INFO" doc:name="Logger"/>
-        <cxf:jaxws-service doc:name="CXF-COMPRAService"  serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService"/>
-        <component class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CompraServiceImpl" doc:name="Java"/>
-    </flow>
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+
+	<configuration doc:name="Configuration">
+		<http:config useTransportForUris="false" />
+
+	</configuration>
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="localhost" port="8081" doc:name="HTTP Listener Configuration">
+		<http:worker-threading-profile
+			poolExhaustedAction="WAIT" />
+	</http:listener-config>
+
+	<flow name="sistemaCentralPagosFlow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/compra" doc:name="HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Logger" />
+		<cxf:jaxws-service doc:name="CXF-COMPRAService"
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService" />
+		<component
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CompraServiceImpl"
+			doc:name="Java" />
+		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]"
+			doc:name="Splitter">
+			<expression-message-info-mapping
+				messageIdExpression="#[java.util.UUID.randomUUID().toString()]"
+				correlationIdExpression="#[payload.idCompra]" />
+		</splitter>
+        
+        <expression-transformer expression="#['identificadorCompra, identificadorProducto, cantidad\n' + message.correlationId+','+payload.idProducto+','+payload.cantidad ]" doc:name="Expression"/>
+        
+		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
+			responseTimeout="10000" doc:name="e-puerto Ordenes" outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"/>
+	</flow>
+
+	<flow name="ImportCSVFile">
+
+		<file:inbound-endpoint path="/home/mauri/Middleware-Confirmaciones"
+			pollingFrequency="5000" doc:name="Source" />
+
+		<object-to-string-transformer doc:name="Object to String" />
+
+		<splitter expression="#[StringUtils.split(message.payload, '\n\r')]"
+			doc:name="Splitter" />
+
+		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
+			doc:name="Expression" />
+
+	</flow>
+
 </mule>

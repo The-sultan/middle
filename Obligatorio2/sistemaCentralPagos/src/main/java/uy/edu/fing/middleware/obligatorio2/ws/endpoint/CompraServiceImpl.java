@@ -13,7 +13,6 @@ import uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService;
 			serviceName="CompraService")
 public class CompraServiceImpl implements CompraService{
 
-	@Override
 	@WebMethod
 	public void compra(@WebParam (name = "ordenRequest")@XmlElement(required=true) Orden orden) {
 		System.out.println(orden); 
