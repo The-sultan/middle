@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="087aba9b-6576-493d-962b-7f21a71e26a0" activeEnvironment="Default" name="SOAP-SistemaOrquestacion" resourceRoot="" soapui-version="5.2.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="829692c5-ccb5-4d05-a7e3-fb85e46f563c" wsaVersion="200508" name="CompraServiceImplServiceSoapBinding" type="wsdl" bindingName="{http://endpoint.ws.obligatorio2.middleware.fing.edu.uy/}CompraServiceImplServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/sistemaOrquestacion/ws/compraService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/sistemaOrquestacion/ws/compraService?wsdl"><con:part><con:url>http://localhost:8080/sistemaOrquestacion/ws/compraService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="CompraServiceImplService" targetNamespace="http://endpoint.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:tns="http://endpoint.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">
+  <wsdl:import location="http://localhost:8080/sistemaOrquestacion/ws/compraService?wsdl=CompraService.wsdl" namespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/"></wsdl:import>
+  <wsdl:binding name="CompraServiceImplServiceSoapBinding" type="ns1:CompraService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsaw:UsingAddressing wsdl:required="true"/>
+    <wsp:PolicyReference URI="#CompraServiceImplServiceSoapBinding_WSAM_Addressing_Policy"/>
+    <wsdl:operation name="compra">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="compra">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CompraServiceImplService">
+    <wsdl:port binding="tns:CompraServiceImplServiceSoapBinding" name="CompraServiceImplPort">
+      <soap:address location="http://localhost:8080/sistemaOrquestacion/ws/compraService"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsp:Policy wsu:Id="CompraServiceImplServiceSoapBinding_WSAM_Addressing_Policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <wsam:Addressing xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+      <wsp:Policy/>
+    </wsam:Addressing>
+  </wsp:Policy>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:8080/sistemaOrquestacion/ws/compraService?wsdl=CompraService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="CompraService" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:ns1="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">
+      <xs:element name="compra" type="tns:compra"/>
+      <xs:element name="compraResponse" type="tns:compraResponse"/>
+      <xs:complexType name="compra">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="tns:orden"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orden">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+          <xs:element minOccurs="0" name="nroTarjeta" type="xs:long"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="productos" nillable="true" type="tns:item"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="item">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cantidad" type="xs:int"/>
+          <xs:element minOccurs="0" name="idProducto" type="xs:long"/>
+          <xs:element minOccurs="0" name="precioUnitario" type="xs:double"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="compraResponse">
+        <xs:sequence/>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="compraResponse">
+    <wsdl:part element="ns1:compraResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="compra">
+    <wsdl:part element="ns1:compra" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CompraService">
+    <wsdl:operation name="compra">
+      <wsdl:input message="ns1:compra" name="compra" wsam:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraRequest" wsaw:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraRequest"></wsdl:input>
+      <wsdl:output message="ns1:compraResponse" name="compraResponse" wsam:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraResponse" wsaw:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint></con:endpoints><con:operation id="0599caa0-5046-4217-9d93-400bdfb1fb73" isOneWay="false" action="" name="compra" bindingOperationName="compra" type="Request-Response" outputName="compraResponse" inputName="compra" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b3606d46-1bbe-4fee-855c-def6c937d057" name="Request 1" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:compra>\r
+         <!--Optional:-->\r
+         <arg0>\r
+            <!--Optional:-->\r
+            <idCompra>2222</idCompra>\r
+            <!--Optional:-->\r
+            <nroTarjeta>1111</nroTarjeta>\r
+            <!--Zero or more repetitions:-->\r
+            <productos>\r
+               <!--Optional:-->\r
+               <cantidad>5</cantidad>\r
+               <!--Optional:-->\r
+               <idProducto>10</idProducto>\r
+               <!--Optional:-->\r
+               <precioUnitario>2015</precioUnitario>\r
+            </productos>\r
+         </arg0>\r
+      </int:compra>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraRequest" addDefaultTo="true" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
