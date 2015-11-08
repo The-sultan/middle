@@ -9,8 +9,8 @@ import uy.edu.fing.middleware.obligatorio2.domain.ReservaEPuerto;
 import uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockEPuertoService;
 
 
-@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService",
-			serviceName="StockService")
+@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockEPuertoService",
+			serviceName="StockEPuertoService")
 public class StockEPuertoServiceImpl implements StockEPuertoService{
 
 	@WebMethod

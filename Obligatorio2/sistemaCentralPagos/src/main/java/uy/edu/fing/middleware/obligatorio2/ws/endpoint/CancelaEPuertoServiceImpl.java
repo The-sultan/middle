@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import uy.edu.fing.middleware.obligatorio2.ws.interfaces.CancelaEPuertoService;
 
 
-@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService",
-			serviceName="StockService")
+@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CancelaEPuertoService",
+			serviceName="CancelaEPuertoService")
 public class CancelaEPuertoServiceImpl implements CancelaEPuertoService{
 
 	@WebMethod

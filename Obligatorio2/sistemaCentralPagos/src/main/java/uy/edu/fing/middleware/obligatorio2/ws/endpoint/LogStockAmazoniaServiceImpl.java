@@ -6,8 +6,8 @@ import javax.jws.WebService;
 import uy.edu.fing.middleware.obligatorio2.ws.interfaces.LogStockAmazoniaService;
 
 
-@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService",
-			serviceName="StockService")
+@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.LogStockAmazoniaService",
+			serviceName="LogStockAmazoniaService")
 public class LogStockAmazoniaServiceImpl implements LogStockAmazoniaService{
 
 	@WebMethod

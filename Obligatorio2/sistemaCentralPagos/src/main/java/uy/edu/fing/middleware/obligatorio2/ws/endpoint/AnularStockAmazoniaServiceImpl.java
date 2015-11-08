@@ -10,8 +10,8 @@ import uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaServ
 import uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService;
 
 
-@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService",
-			serviceName="StockService")
+@WebService(endpointInterface="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService",
+			serviceName="AnularAmazoniaService")
 public class AnularStockAmazoniaServiceImpl implements AnularStockAmazoniaService{
 
 	@WebMethod

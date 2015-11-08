@@ -27,7 +27,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			poolExhaustedAction="WAIT" />
 	</http:listener-config>
 	<http:request-config name="HTTP_Request_Configuration"
-		host="localhost" port="18080" doc:name="HTTP Request Configuration" />
+		host="localhost" port="8080" doc:name="HTTP Request Configuration" />
 	<ws:consumer-config name="Web_Service_Amazonia"
 		wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 		service="StockLocalService" port="StockLocalPort"
@@ -151,5 +151,20 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
 			responseTimeout="10000" doc:name="e-puerto Ordenes" />
 	</flow>
+    <flow name="mulePagosYa">
+    <http:listener config-ref="HTTP_Listener_Configuration"
+			path="/pagosYa" doc:name="HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Logger" />
+		<cxf:jaxws-service doc:name="CXF-Service2"
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.PagosRestService" />
+		<component
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.PagosRestServiceImpl"
+			doc:name="Java" />
+
+        <http:request config-ref="HTTP_Request_Configuration" path="pedidosYa/rest/pagoyaservice" method="GET" doc:name="HTTP"/>
+        
+
+    </flow>
 
 </mule>
