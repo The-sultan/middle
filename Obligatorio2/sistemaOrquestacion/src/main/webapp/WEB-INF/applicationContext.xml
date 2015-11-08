@@ -9,9 +9,37 @@
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd  
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+ 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
 	<!-- activates annotations (@Service, @Component, @Autowired) -->
 	<context:component-scan base-package="uy.edu.fing.middleware.obligatorio2" />
-
-	<jaxws:endpoint id="compraServiceWS" implementor="#compraService" address="/compraService"/>
 	
+	<jaxws:endpoint id="compraServiceWS" implementor="#compraService" address="/compraService">
+		<jaxws:inInterceptors>
+ 	   		 <ref bean="logInBound" />
+			 <ref bean="inbound-security" />
+	   </jaxws:inInterceptors>
+	   <jaxws:outInterceptors>
+		 <ref bean="logOutBound" />
+	   </jaxws:outInterceptors>  
+	</jaxws:endpoint>	
+	
+	<bean id="logInBound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />	
+	<bean id="logOutBound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />	
+	
+	 <!--  WSS4JInInterceptor for validating the signature of inbound SOAP -->
+	 <bean id="inbound-security" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+	   <constructor-arg>
+	     <map>
+	       <entry key="action" value="Signature"/>	
+	       <entry key="signaturePropFile" value="serverKeystore.properties"/>
+	       <entry key="passwordCallbackRef" >
+	       		 <ref bean="myPasswordCallback"/>
+	       </entry>
+	     </map>
+	   </constructor-arg>
+	  </bean>
+	  
+	   <bean id="myPasswordCallback" class="uy.edu.fing.middleware.obligatorio2.handlers.ServerPasswordCallback"/>
 </beans>
