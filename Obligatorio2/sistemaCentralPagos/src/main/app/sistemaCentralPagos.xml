@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
 	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
 	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
@@ -15,7 +16,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
 http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
 
 	<configuration doc:name="Configuration">
 		<http:config useTransportForUris="false" />
@@ -50,10 +52,13 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
 			doc:name="Java" />
 
-		<cxf:jaxws-client 
-			 wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
-			operation="reservaProductos" doc:name="CXF" serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal"/>
-		<outbound-endpoint address="http://localhost:8080/stockLocal/services/stock_local" doc:name="Generic"/>
+		<cxf:jaxws-client
+			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+			operation="reservaProductos" doc:name="CXF"
+			serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal" />
+		<outbound-endpoint
+			address="http://localhost:8080/stockLocal/services/stock_local"
+			doc:name="Generic" />
 
 	</flow>
 
@@ -68,10 +73,13 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.AnularStockAmazoniaServiceImpl"
 			doc:name="Java" />
 
-		<cxf:jaxws-client 
-			 wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
-			operation="anularReserva" doc:name="CXF" serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal"/>
-		<outbound-endpoint address="http://localhost:8080/stockLocal/services/stock_local" doc:name="Generic"/>
+		<cxf:jaxws-client
+			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+			operation="anularReserva" doc:name="CXF"
+			serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal" />
+		<outbound-endpoint
+			address="http://localhost:8080/stockLocal/services/stock_local"
+			doc:name="Generic" />
 	</flow>
 	<flow name="logStockAmazonia">
 		<http:listener config-ref="HTTP_Listener_Configuration"
@@ -113,12 +121,12 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<component
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockEPuertoServiceImpl"
 			doc:name="Java" />
-<!-- 		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
-<!-- 			doc:name="Copy_of_Splitter"> -->
-<!-- 			<expression-message-info-mapping -->
-<!-- 				messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
-<!-- 				correlationIdExpression="#[payload.idCompra]" /> -->
-<!-- 		</splitter> -->
+		<!-- <splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
+		<!-- doc:name="Copy_of_Splitter"> -->
+		<!-- <expression-message-info-mapping -->
+		<!-- messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
+		<!-- correlationIdExpression="#[payload.idCompra]" /> -->
+		<!-- </splitter> -->
 		<expression-transformer
 			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
 			doc:name="Expression" />
@@ -126,8 +134,8 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
 			responseTimeout="10000" doc:name="e-puerto Ordenes" />
 	</flow>
-	
-		<flow name="apiCancelaEpuerto">
+
+	<flow name="apiCancelaEpuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/cancelaEPuerto" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -138,21 +146,20 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<component
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CancelaEPuertoServiceImpl"
 			doc:name="Java" />
-<!-- 		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
-<!-- 			doc:name="Copy_of_Splitter"> -->
-<!-- 			<expression-message-info-mapping -->
-<!-- 				messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
-<!-- 				correlationIdExpression="#[payload.idCompra]" /> -->
-<!-- 		</splitter> -->
-		<expression-transformer
-			expression="#['idReserva\n' + payload.idReserva]"
+		<!-- <splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
+		<!-- doc:name="Copy_of_Splitter"> -->
+		<!-- <expression-message-info-mapping -->
+		<!-- messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
+		<!-- correlationIdExpression="#[payload.idCompra]" /> -->
+		<!-- </splitter> -->
+		<expression-transformer expression="#['idReserva\n' + payload.idReserva]"
 			doc:name="Expression" />
-		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Cancelaciones']"
-			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
+		<file:outbound-endpoint
+			path="#[server.userHome+'/Middleware-Cancelaciones']" outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
 			responseTimeout="10000" doc:name="e-puerto Ordenes" />
 	</flow>
-    <flow name="mulePagosYa">
-    <http:listener config-ref="HTTP_Listener_Configuration"
+	<flow name="mulePagosYa">
+		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/pagosYa" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
 			level="INFO" doc:name="Logger" />
@@ -161,10 +168,13 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<component
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.PagosRestServiceImpl"
 			doc:name="Java" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
+		<http:request config-ref="HTTP_Request_Configuration"
+			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
 
-        <http:request config-ref="HTTP_Request_Configuration" path="pedidosYa/rest/pagoyaservice" method="GET" doc:name="HTTP"/>
-        
 
-    </flow>
+	</flow>
 
 </mule>

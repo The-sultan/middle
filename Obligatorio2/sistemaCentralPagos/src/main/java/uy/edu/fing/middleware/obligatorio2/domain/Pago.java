@@ -5,9 +5,9 @@ import java.util.Date;
 public class Pago {
 
 	private Long idCompra;
-	private String creditCard;
+	private String nroTarjeta;
 	private Double monto;
-	private Date fecha;
+	private Date fechaHora;
 	
 	
 	public Long getIdCompra() {
@@ -16,11 +16,11 @@ public class Pago {
 	public void setIdCompra(Long idCompra) {
 		this.idCompra = idCompra;
 	}
-	public String getCreditCard() {
-		return creditCard;
+	public String getNroTarjeta() {
+		return nroTarjeta;
 	}
-	public void setCreditCard(String creditCard) {
-		this.creditCard = creditCard;
+	public void setNroTarjeta(String nroTarjeta) {
+		this.nroTarjeta = nroTarjeta;
 	}
 	public Double getMonto() {
 		return monto;
@@ -28,12 +28,14 @@ public class Pago {
 	public void setMonto(Double monto) {
 		this.monto = monto;
 	}
-	public Date getFecha() {
-		return fecha;
+	public Date getFechaHora() {
+		return fechaHora;
 	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setFechaHora(Date fechaHora) {
+		this.fechaHora = fechaHora;
 	}
+	
+	
 	
 	
 }
