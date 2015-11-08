@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
 	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
 	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core"
@@ -12,7 +13,9 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
-http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
 
 	<configuration doc:name="Configuration">
 		<http:config useTransportForUris="false" />
@@ -23,28 +26,66 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 		<http:worker-threading-profile
 			poolExhaustedAction="WAIT" />
 	</http:listener-config>
+	<http:request-config name="HTTP_Request_Configuration"
+		host="localhost" port="18080" doc:name="HTTP Request Configuration" />
+	<ws:consumer-config name="Web_Service_Amazonia"
+		wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+		service="StockLocalService" port="StockLocalPort"
+		serviceAddress="http://localhost:8080/stockLocal/services/stock_local"
+		doc:name="Web Service Consumer" />
 
-	<flow name="sistemaCentralPagosFlow">
+
+
+	<flow name="stockAmazonia">
 		<http:listener config-ref="HTTP_Listener_Configuration"
-			path="/compra" doc:name="HTTP" />
+			path="/stockAmazonia" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
 			level="INFO" doc:name="Logger" />
-		<cxf:jaxws-service doc:name="CXF-COMPRAService"
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CompraService" />
+		<cxf:jaxws-service doc:name="CXF-STOCKService"
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" />
 		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CompraServiceImpl"
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
 			doc:name="Java" />
-		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]"
-			doc:name="Splitter">
-			<expression-message-info-mapping
-				messageIdExpression="#[java.util.UUID.randomUUID().toString()]"
-				correlationIdExpression="#[payload.idCompra]" />
-		</splitter>
-        
-        <expression-transformer expression="#['identificadorCompra, identificadorProducto, cantidad\n' + message.correlationId+','+payload.idProducto+','+payload.cantidad ]" doc:name="Expression"/>
-        
-		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
-			responseTimeout="10000" doc:name="e-puerto Ordenes" outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"/>
+		<custom-transformer
+			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
+			doc:name="Java" />
+
+		<cxf:jaxws-client 
+			 wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+			operation="reservaProductos" doc:name="CXF" serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal"/>
+		<outbound-endpoint address="http://localhost:8080/stockLocal/services/stock_local" doc:name="Generic"/>
+
+	</flow>
+
+	<flow name="anularStockAmazonia">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/anularStockAmazonia" doc:name="HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Logger" />
+		<cxf:jaxws-service doc:name="CXF-STOCKService"
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService" />
+		<component
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.AnularStockAmazoniaServiceImpl"
+			doc:name="Java" />
+
+		<cxf:jaxws-client 
+			 wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+			operation="anularReserva" doc:name="CXF" serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal"/>
+		<outbound-endpoint address="http://localhost:8080/stockLocal/services/stock_local" doc:name="Generic"/>
+	</flow>
+	<flow name="logStockAmazonia">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/logStockAmazonia" doc:name="HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Logger" />
+		<!-- <cxf:jaxws-service doc:name="CXF-STOCKService" -->
+		<!-- serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.LogStockAmazoniaService" 
+			/> -->
+		<!-- <component -->
+		<!-- class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.LogStockAmazoniaServiceImpl" -->
+		<!-- doc:name="Java" /> -->
+		<ws:consumer config-ref="Web_Service_Amazonia" operation="stockLocalLog"
+			doc:name="Web Service Consumer" />
 	</flow>
 
 	<flow name="ImportCSVFile">
@@ -60,6 +101,30 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
 			doc:name="Expression" />
 
+	</flow>
+	<flow name="apiEpuerto">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/stockEPuerto" doc:name="Copy_of_HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Copy_of_Logger" />
+		<cxf:jaxws-service
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService"
+			doc:name="Copy_of_CXF-STOCKService" />
+		<component
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
+			doc:name="Copy_of_Java" />
+		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]"
+			doc:name="Copy_of_Splitter">
+			<expression-message-info-mapping
+				messageIdExpression="#[java.util.UUID.randomUUID().toString()]"
+				correlationIdExpression="#[payload.idCompra]" />
+		</splitter>
+		<expression-transformer
+			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + message.correlationId+','+payload.idProducto+','+payload.cantidad ]"
+			doc:name="Copy_of_Expression" />
+		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
+			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
+			responseTimeout="10000" doc:name="Copy_of_e-puerto Ordenes" />
 	</flow>
 
 </mule>

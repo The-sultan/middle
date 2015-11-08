@@ -1,6 +1,7 @@
 package uy.edu.fing.middleware.obligatorio2.endpoint;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -23,18 +24,26 @@ public class StockLocalEndpoint implements StockLocal{
 	@WebMethod
 	public @WebResult(name="reservaProductosResponse") DatoSalida reservaProductos(@WebParam (name = "reservaProductosRequest" ) @XmlElement(required=true) List<DatoReserva> productos) throws Exception {
 		System.out.println("Reservar Productos");
-		return null;
+		DatoSalida ret  = new DatoSalida();
+		ret.setDescripcion("test");
+		
+		return ret;
 	}
 	
 	@WebMethod
 	public @WebResult(name="anularReservaResponse") DatoSalida anularReserva(@WebParam (name = "anularReservaRequest" ) @XmlElement(required=true) Long idReserva) throws Exception{
 		System.out.println("Anular Reserva");
-		return null;
+		DatoSalida ret  = new DatoSalida();
+		ret.setDescripcion("testAnular");
+		
+		return ret;
 	}
  
 	@WebMethod
 	public @WebResult(name="stockLocalLogResponse") List<String> stockLocalLog(){
 		System.out.println("Login Reserva");
+		String now = Calendar.getInstance().toString();
+		log.add(now);
 		return this.log;
 	}
 }
