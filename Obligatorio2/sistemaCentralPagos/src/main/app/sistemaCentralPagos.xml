@@ -102,29 +102,54 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			doc:name="Expression" />
 
 	</flow>
-	<flow name="apiEpuerto">
+	<flow name="apiReservaEpuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
-			path="/stockEPuerto" doc:name="Copy_of_HTTP" />
+			path="/stockEPuerto" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
-			level="INFO" doc:name="Copy_of_Logger" />
+			level="INFO" doc:name="Logger" />
 		<cxf:jaxws-service
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService"
-			doc:name="Copy_of_CXF-STOCKService" />
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockEPuertoService"
+			doc:name="CXF-STOCKService" />
 		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
-			doc:name="Copy_of_Java" />
-		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]"
-			doc:name="Copy_of_Splitter">
-			<expression-message-info-mapping
-				messageIdExpression="#[java.util.UUID.randomUUID().toString()]"
-				correlationIdExpression="#[payload.idCompra]" />
-		</splitter>
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockEPuertoServiceImpl"
+			doc:name="Java" />
+<!-- 		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
+<!-- 			doc:name="Copy_of_Splitter"> -->
+<!-- 			<expression-message-info-mapping -->
+<!-- 				messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
+<!-- 				correlationIdExpression="#[payload.idCompra]" /> -->
+<!-- 		</splitter> -->
 		<expression-transformer
-			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + message.correlationId+','+payload.idProducto+','+payload.cantidad ]"
-			doc:name="Copy_of_Expression" />
+			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
+			doc:name="Expression" />
 		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
 			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
-			responseTimeout="10000" doc:name="Copy_of_e-puerto Ordenes" />
+			responseTimeout="10000" doc:name="e-puerto Ordenes" />
+	</flow>
+	
+		<flow name="apiCancelaEpuerto">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/cancelaEPuerto" doc:name="HTTP" />
+		<logger message=".#[message.inboundProperties.'http.request.path']"
+			level="INFO" doc:name="Logger" />
+		<cxf:jaxws-service
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CancelaEPuertoService"
+			doc:name="CXF-STOCKService" />
+		<component
+			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.CancelaEPuertoServiceImpl"
+			doc:name="Java" />
+<!-- 		<splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
+<!-- 			doc:name="Copy_of_Splitter"> -->
+<!-- 			<expression-message-info-mapping -->
+<!-- 				messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
+<!-- 				correlationIdExpression="#[payload.idCompra]" /> -->
+<!-- 		</splitter> -->
+		<expression-transformer
+			expression="#['idReserva\n' + payload.idReserva]"
+			doc:name="Expression" />
+		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Cancelaciones']"
+			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
+			responseTimeout="10000" doc:name="e-puerto Ordenes" />
 	</flow>
 
 </mule>
