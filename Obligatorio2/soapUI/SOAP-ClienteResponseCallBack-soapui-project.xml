@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="2ff5cd8f-7732-4866-b959-9a91839eeb0a" activeEnvironment="Default" name="SOAP-ClienteResponseCallBack" resourceRoot="" soapui-version="5.2.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="222548f8-3b65-4645-b6b5-edb9e69ca78e" wsaVersion="NONE" name="ResponseCompraServiceServiceSoapBinding" type="wsdl" bindingName="{http://interfaces.obligatorio2.middleware.fing.edu.uy/}ResponseCompraServiceServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/clienteCallBack/services/responseCompra?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/clienteCallBack/services/responseCompra?wsdl"><con:part><con:url>http://localhost:8080/clienteCallBack/services/responseCompra?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="ResponseCompraServiceService" targetNamespace="http://interfaces.obligatorio2.middleware.fing.edu.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://interfaces.obligatorio2.middleware.fing.edu.uy/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://interfaces.obligatorio2.middleware.fing.edu.uy/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="responseCompra" type="tns:responseCompra"/>
+      <xs:element name="responseCompraResponse" type="tns:responseCompraResponse"/>
+      <xs:complexType name="responseCompra">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="responseCompraResponse">
+        <xs:sequence/>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="responseCompraResponse">
+    <wsdl:part element="tns:responseCompraResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="responseCompra">
+    <wsdl:part element="tns:responseCompra" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ResponseCompraService">
+    <wsdl:operation name="responseCompra">
+      <wsdl:input message="tns:responseCompra" name="responseCompra"></wsdl:input>
+      <wsdl:output message="tns:responseCompraResponse" name="responseCompraResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ResponseCompraServiceServiceSoapBinding" type="tns:ResponseCompraService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="responseCompra">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="responseCompra">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="responseCompraResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ResponseCompraServiceService">
+    <wsdl:port binding="tns:ResponseCompraServiceServiceSoapBinding" name="ResponseCompraServicePort">
+      <soap:address location="http://localhost:8080/clienteCallBack/services/responseCompra"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/clienteCallBack/services/responseCompra</con:endpoint></con:endpoints><con:operation id="3e781d01-5ef6-4bec-a22d-922c60664f41" isOneWay="false" action="" name="responseCompra" bindingOperationName="responseCompra" type="Request-Response" outputName="responseCompraResponse" inputName="responseCompra" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="5ea7f3d9-f620-4267-9ddb-7f70bfb08dc8" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/clienteCallBack/services/responseCompra</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.obligatorio2.middleware.fing.edu.uy/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <int:responseCompra>\r
+         <arg0>VAMOS QIE VAMOS</arg0>\r
+      </int:responseCompra>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.obligatorio2.middleware.fing.edu.uy/ResponseCompraService/responseCompra"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
