@@ -25,8 +25,6 @@
 	   </jaxws:outInterceptors>  
 	</jaxws:endpoint>	
 	
-	<bean id="logInBound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />	
-	<bean id="logOutBound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />	
 	
 	 <!--  WSS4JInInterceptor for validating the signature of inbound SOAP -->
 	 <bean id="inbound-security" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
@@ -41,5 +39,10 @@
 	   </constructor-arg>
 	  </bean>
 	  
-	   <bean id="myPasswordCallback" class="uy.edu.fing.middleware.obligatorio2.handlers.ServerPasswordCallback"/>
+	  
+	<bean id="logInBound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />	
+	<bean id="logOutBound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />	
+	<bean id="myPasswordCallback" class="uy.edu.fing.middleware.obligatorio2.handlers.ServerPasswordCallback"/>
+	  
+	  
 </beans>
