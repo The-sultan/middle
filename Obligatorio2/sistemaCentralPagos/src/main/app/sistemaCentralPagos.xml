@@ -41,8 +41,8 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	<flow name="stockAmazonia">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockAmazonia" doc:name="HTTP" />
-		<logger message=".#[message.inboundProperties.'http.request.path']"
-			level="INFO" doc:name="Logger" />
+<!-- 		<logger message=".#[message.inboundProperties.'http.request.path']" -->
+<!-- 			level="INFO" doc:name="Logger" /> -->
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" />
 		<component
@@ -56,9 +56,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="reservaProductos" doc:name="CXF"
 			serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal" />
-		<outbound-endpoint
+		<outbound-endpoint exchange-pattern="request-response"
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
+		<logger message="#[message.payload]"
+			level="INFO" doc:name="Logger" />
 
 	</flow>
 
@@ -77,7 +79,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
 			serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal" />
-		<outbound-endpoint
+		<outbound-endpoint exchange-pattern="request-response"
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
 	</flow>
@@ -94,21 +96,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<!-- doc:name="Java" /> -->
 		<ws:consumer config-ref="Web_Service_Amazonia" operation="stockLocalLog"
 			doc:name="Web Service Consumer" />
-	</flow>
-
-	<flow name="ImportCSVFile">
-
-		<file:inbound-endpoint path="/home/mauri/Middleware-Confirmaciones"
-			pollingFrequency="5000" doc:name="Source" />
-
-		<object-to-string-transformer doc:name="Object to String" />
-
-		<splitter expression="#[StringUtils.split(message.payload, '\n\r')]"
-			doc:name="Splitter" />
-
-		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
-			doc:name="Expression" />
-
 	</flow>
 	<flow name="apiReservaEpuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
@@ -133,6 +120,13 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
 			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
 			responseTimeout="10000" doc:name="e-puerto Ordenes" />
+		<file:outbound-endpoint path="/home/mauri/Middleware-Confirmaciones"
+			doc:name="Source" />
+		<object-to-string-transformer doc:name="Object to String" />
+		<splitter expression="#[StringUtils.split(message.payload, '\n\r')]"
+			doc:name="Splitter" />
+		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
+			doc:name="Expression" />
 	</flow>
 
 	<flow name="apiCancelaEpuerto">
