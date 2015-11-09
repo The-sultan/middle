@@ -97,22 +97,19 @@
       <wsdl:output message="ns1:compraResponse" name="compraResponse" wsam:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraResponse" wsaw:Action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraResponse"></wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint></con:endpoints><con:operation id="0599caa0-5046-4217-9d93-400bdfb1fb73" isOneWay="false" action="" name="compra" bindingOperationName="compra" type="Request-Response" outputName="compraResponse" inputName="compra" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="265c5b8a-262b-405c-83f4-306b347c1e1f" name="Request" useWsAddressing="true" outgoingWss="outgoing"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">\r
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint></con:endpoints><con:operation id="0599caa0-5046-4217-9d93-400bdfb1fb73" isOneWay="false" action="" name="compra" bindingOperationName="compra" type="Request-Response" outputName="compraResponse" inputName="compra" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="1b63e489-5743-43ea-823f-15bcb3e415c5" name="Request" useWsAddressing="true" outgoingWss="outgoing"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/sistemaOrquestacion/ws/compraService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
-      <int:compra>
-        <arg0>\r
-         <idCompra>1521</idCompra>\r
-         <nroTarjeta>212</nroTarjeta>\r
-         <productos>\r
-            <cantidad>5</cantidad>\r
-            <idProducto>23124</idProducto>\r
-            <precioUnitario>100</precioUnitario>\r
-          </productos>\r
-         </arg0>\r
+      <int:compra>\r
+       <arg0>\r
+        <idCompra>5253</idCompra>\r
+        <nroTarjeta>2015</nroTarjeta>\r
+        <productos>\r
+          <cantidad>25</cantidad>\r
+          <idProducto>10</idProducto>\r
+          <precioUnitario>105</precioUnitario>\r
+         </productos>\r
+        </arg0>\r
       </int:compra>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer><con:crypto><con:source>d:/Users/c753388/Desktop/IMiddle/middle/Obligatorio2/WSSecurity/Server/testServerKeystore.jks</con:source><con:password>testpwd</con:password><con:type>KEYSTORE</con:type></con:crypto><con:outgoing><con:name>outgoing</con:name><con:username>testkey</con:username><con:password/><con:entry type="Signature" password="testpwd"><con:configuration><crypto>testKeystore.jks</crypto><keyIdentifierType>2</keyIdentifierType><signatureAlgorithm/><signatureCanonicalization/><useSingleCert>true</useSingleCert><digestAlgorithm/><customTokenValueType/><customTokenId/><signaturePart>&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
-  &lt;con:entry key="id" value=""/>
-  &lt;con:entry key="namespace" value=""/>
-&lt;/xml-fragment></signaturePart></con:configuration></con:entry></con:outgoing></con:wssContainer><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/CompraService/compraRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer><con:crypto><con:source>d:/Users/c753388/Desktop/IMiddle/middle/Obligatorio2/WSSecurity/Server/testKeystore.jks</con:source><con:password>testpwd</con:password><con:type>KEYSTORE</con:type><con:defaultAlias>testkey</con:defaultAlias></con:crypto><con:outgoing><con:name>outgoing</con:name><con:username>testkey</con:username><con:password/><con:entry type="Signature" password="testpwd"><con:configuration><crypto>testKeystore.jks</crypto><keyIdentifierType>2</keyIdentifierType><signatureAlgorithm/><signatureCanonicalization/><useSingleCert>true</useSingleCert><digestAlgorithm/><customTokenValueType/><customTokenId/></con:configuration></con:entry></con:outgoing></con:wssContainer><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
