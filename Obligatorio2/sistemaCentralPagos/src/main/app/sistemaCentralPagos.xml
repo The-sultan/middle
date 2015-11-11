@@ -41,13 +41,16 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	<flow name="stockAmazonia">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockAmazonia" doc:name="HTTP" />
-<!-- 		<logger message=".#[message.inboundProperties.'http.request.path']" -->
-<!-- 			level="INFO" doc:name="Logger" /> -->
+		<!-- <logger message=".#[message.inboundProperties.'http.request.path']" -->
+		<!-- level="INFO" doc:name="Logger" /> -->
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" />
 		<component
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
 			doc:name="Java" />
+        <response>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"/>
+        </response>
 		<custom-transformer
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
 			doc:name="Java" />
@@ -59,8 +62,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<outbound-endpoint exchange-pattern="request-response"
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
-		<logger message="#[message.payload]"
-			level="INFO" doc:name="Logger" />
+
 
 	</flow>
 
