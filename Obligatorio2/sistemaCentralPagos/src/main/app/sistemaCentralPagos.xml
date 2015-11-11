@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:json="http://www.mulesoft.org/schema/mule/json"
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json"
 	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
 	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
@@ -8,7 +9,8 @@
 	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
@@ -38,7 +40,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
 
 
-	<flow name="stockAmazonia">
+	<flow name="ReservaPedido-Stock">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockAmazonia" doc:name="HTTP" />
 		<!-- <logger message=".#[message.inboundProperties.'http.request.path']" -->
@@ -66,7 +68,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
 	</flow>
 
-	<flow name="anularStockAmazonia">
+	<flow name="AnulacionPedido-Stock">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/anularStockAmazonia" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -85,7 +87,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
 	</flow>
-	<flow name="logStockAmazonia">
+	<flow name="ConfirmacionPedido-ePuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/logStockAmazonia" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -99,7 +101,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<ws:consumer config-ref="Web_Service_Amazonia" operation="stockLocalLog"
 			doc:name="Web Service Consumer" />
 	</flow>
-	<flow name="apiReservaEpuerto">
+	<flow name="ReservaPedido-ePuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockEPuerto" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -131,7 +133,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			doc:name="Expression" />
 	</flow>
 
-	<flow name="apiCancelaEpuerto">
+	<flow name="AnulacionPedido-ePuerto-SOAP">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/cancelaEPuerto" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -173,4 +175,13 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
 	</flow>
 
+    <jms:activemq-connector name="Active_MQ" validateConnections="true" durable="true" persistentDelivery="true" doc:name="Active MQ" clientId="Amazonia"  specification="1.1" brokerURL="tcp://localhost:61616"/>
+
+    <flow name="AnulacionPedido-ePuerto-JMS" initialState="started" tracking:enable-default-events="true">
+        <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="ePuerto" doc:name="JMS-AnulacionPedido" />
+        <logger message="Anulacion recibida" level="INFO" doc:name="Logger"/>
+        <byte-array-to-object-transformer returnClass="java.lang.String" ignoreBadInput="true" metadata:id="7019270b-827f-41e3-b044-afd740b8f795" doc:name="Byte Array to Object"/>
+        <file:outbound-endpoint path="#[server.userHome+'/Middleware-Cancelaciones']" outputPattern="#['anulacion-'+message.correlationId+'-' +server.dateTime]" responseTimeout="10000" doc:name="File"/>
+    </flow>
+    
 </mule>
