@@ -72,9 +72,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/anularStockAmazonia" doc:name="HTTP" />
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService" 
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService"
 			port="AnularStockServicePort" service="AnularStockService" />
-			
+
 		<message-properties-transformer scope="invocation"
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
@@ -162,15 +162,23 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	<flow name="mulePagosYa">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/pagosYa" doc:name="HTTP" />
-		<logger message=".#[message.inboundProperties.'http.request.path']"
-			level="INFO" doc:name="Logger" />
 		<cxf:jaxws-service doc:name="CXF-Service2"
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.PagosRestService" />
-		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.PagosRestServiceImpl"
-			doc:name="Java" />
+		<message-properties-transformer scope="invocation"
+			doc:name="Message Properties">
+			<delete-message-property key="method" />
+<!-- 			<response> -->
+<!-- 				<custom-transformer -->
+<!-- 					class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" -->
+<!-- 					doc:name="Java" /> -->
+<!-- 			</response> -->
+		</message-properties-transformer>
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
+        <response>
+            <object-to-string-transformer doc:name="Object to String"/>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"/>
+        </response>
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
