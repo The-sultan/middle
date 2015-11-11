@@ -44,8 +44,10 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<!-- <logger message=".#[message.inboundProperties.'http.request.path']" -->
 		<!-- level="INFO" doc:name="Logger" /> -->
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" port="StockServicePort" service="StockService"/>
-		<message-properties-transformer scope="invocation" doc:name="Message Properties">
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService"
+			port="StockServicePort" service="StockService" />
+		<message-properties-transformer scope="invocation"
+			doc:name="Message Properties">
 			<delete-message-property key="method" />
 		</message-properties-transformer>
         <response>
@@ -69,14 +71,17 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	<flow name="anularStockAmazonia">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/anularStockAmazonia" doc:name="HTTP" />
-		<logger message=".#[message.inboundProperties.'http.request.path']"
-			level="INFO" doc:name="Logger" />
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService" />
-		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.AnularStockAmazoniaServiceImpl"
-			doc:name="Java" />
-
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.AnularStockAmazoniaService" 
+			port="AnularStockServicePort" service="AnularStockService" />
+			
+		<message-properties-transformer scope="invocation"
+			doc:name="Message Properties">
+			<delete-message-property key="method" />
+		</message-properties-transformer>
+        <response>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"/>
+        </response>
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
