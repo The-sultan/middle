@@ -126,7 +126,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			<delete-message-property key="method" />
 		</message-properties-transformer>
 		<expression-transformer
-			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
+			expression="#['identificadorCompra,identificadorProducto,cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
 			doc:name="Expression" />
 		<set-session-variable variableName="freezeDateTime"
 			value="#[server.dateTime]" doc:name="Store Date Time" />
