@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:json="http://www.mulesoft.org/schema/mule/json"
-	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+<mule xmlns:core="http://www.mulesoft.org/schema/mule/core"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
 	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
 	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
@@ -21,7 +21,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
 	<configuration doc:name="Configuration">
 		<http:config useTransportForUris="false" />
-
 	</configuration>
 	<http:listener-config name="HTTP_Listener_Configuration"
 		host="localhost" port="8081" doc:name="HTTP Listener Configuration">
@@ -35,6 +34,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		service="StockLocalService" port="StockLocalPort"
 		serviceAddress="http://localhost:8080/stockLocal/services/stock_local"
 		doc:name="Web Service Consumer" />
+	<file:connector name="FileConnector" outputPattern="#[server.dateTime]"
+		writeToDirectory="#[server.userHome+server.fileSeparator+'Middleware-Ordenes']"
+		readFromDirectory="#[server.userHome+server.fileSeparator+'Middleware-Confirmaciones']"
+		workDirectory="#[server.userHome+server.fileSeparator+'Middleware-Logs']"
+		autoDelete="true" streaming="true" validateConnections="true"
+		doc:name="File" workFileNamePattern="test.csv" />
 
 
 
@@ -112,24 +117,33 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<cxf:jaxws-service
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockEPuertoService"
 			doc:name="CXF-STOCKService" />
-		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockEPuertoServiceImpl"
-			doc:name="Java" />
-		<!-- <splitter enableCorrelation="ALWAYS" expression="#[payload.productos]" -->
-		<!-- doc:name="Copy_of_Splitter"> -->
-		<!-- <expression-message-info-mapping -->
-		<!-- messageIdExpression="#[java.util.UUID.randomUUID().toString()]" -->
-		<!-- correlationIdExpression="#[payload.idCompra]" /> -->
-		<!-- </splitter> -->
+		<message-properties-transformer scope="invocation"
+			doc:name="Message Properties">
+			<delete-message-property key="method" />
+		</message-properties-transformer>
 		<expression-transformer
 			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
 			doc:name="Expression" />
+		<set-session-variable variableName="outputfilepath"
+			value="#[server.dateTime]" doc:name="Session Variable" />
 		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
-			outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
-			responseTimeout="10000" doc:name="e-puerto Ordenes" />
-		<file:outbound-endpoint path="/home/mauri/Middleware-Confirmaciones"
-			doc:name="Source" />
+			outputPattern="#['compra-' +sessionVars['outputfilepath']+'.csv']"
+			connector-ref="FileConnector" responseTimeout="10000" doc:name="e-puerto Ordenes" />
+		<scripting:component doc:name="Groovy">
+			<scripting:script engine="Groovy"><![CDATA[sleep(10000);
+new File("/home/mauriciovignale/Middleware-Confirmaciones/compra-"+sessionVars['outputfilepath']+".csv").text]]></scripting:script>
+		</scripting:component>
 		<object-to-string-transformer doc:name="Object to String" />
+		<splitter expression="#[org.mule.util.StringUtils.split(message.payload, '\n')]"
+			doc:name="Splitter" />
+		<expression-transformer
+			expression="#[org.mule.util.StringUtils.split(message.payload, ',')]"
+			doc:name="Expression" />
+		<object-to-string-transformer doc:name="Object to String" />
+
+	</flow>
+
+	<flow name="flowextra">
 		<splitter expression="#[StringUtils.split(message.payload, '\n\r')]"
 			doc:name="Splitter" />
 		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
@@ -139,8 +153,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 	<flow name="apiCancelaEpuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/cancelaEPuerto" doc:name="HTTP" />
-		<logger message=".#[message.inboundProperties.'http.request.path']"
-			level="INFO" doc:name="Logger" />
+
 		<cxf:jaxws-service
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.CancelaEPuertoService"
 			doc:name="CXF-STOCKService" />
@@ -167,11 +180,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<message-properties-transformer scope="invocation"
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
-<!-- 			<response> -->
-<!-- 				<custom-transformer -->
-<!-- 					class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" -->
-<!-- 					doc:name="Java" /> -->
-<!-- 			</response> -->
+			<!-- <response> -->
+			<!-- <custom-transformer -->
+			<!-- class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" -->
+			<!-- doc:name="Java" /> -->
+			<!-- </response> -->
 		</message-properties-transformer>
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
