@@ -5,6 +5,8 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import uy.edu.fing.middleware.obligatorio2.domain.Item;
 import uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService;
 

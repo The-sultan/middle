@@ -44,7 +44,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<!-- <logger message=".#[message.inboundProperties.'http.request.path']" -->
 		<!-- level="INFO" doc:name="Logger" /> -->
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
-			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" />
+			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" port="StockServicePort" service="StockService"/>
 		<component
 			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
 			doc:name="Java" />
