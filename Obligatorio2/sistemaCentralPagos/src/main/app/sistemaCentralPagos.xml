@@ -45,9 +45,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<!-- level="INFO" doc:name="Logger" /> -->
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
 			serviceClass="uy.edu.fing.middleware.obligatorio2.ws.interfaces.StockAmazoniaService" port="StockServicePort" service="StockService"/>
-		<component
-			class="uy.edu.fing.middleware.obligatorio2.ws.endpoint.StockAmazoniaServiceImpl"
-			doc:name="Java" />
+		<message-properties-transformer scope="invocation" doc:name="Message Properties">
+			<delete-message-property key="method" />
+		</message-properties-transformer>
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"/>
         </response>
