@@ -55,9 +55,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
 		</message-properties-transformer>
-        <response>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"/>
-        </response>
+		<response>
+			<custom-transformer
+				class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer"
+				doc:name="Java" />
+		</response>
 		<custom-transformer
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
 			doc:name="Java" />
@@ -84,9 +86,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
 		</message-properties-transformer>
-        <response>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"/>
-        </response>
+		<response>
+			<custom-transformer
+				class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer"
+				doc:name="Java" />
+		</response>
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
@@ -124,14 +128,18 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		<expression-transformer
 			expression="#['identificadorCompra, identificadorProducto, cantidad\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
 			doc:name="Expression" />
-		<set-session-variable variableName="outputfilepath"
-			value="#[server.dateTime]" doc:name="Session Variable" />
-		<file:outbound-endpoint path="#[server.userHome+'/Middleware-Ordenes']"
-			outputPattern="#['compra-' +sessionVars['outputfilepath']+'.csv']"
+		<set-session-variable variableName="freezeDateTime"
+			value="#[server.dateTime]" doc:name="Store Date Time" />
+		<set-session-variable variableName="inputfilepath"
+			value="#[server.userHome+server.fileSeparator+'Middleware-Confirmaciones'+server.fileSeparator+'compra-'+sessionVars['freezeDateTime']+'.csv']"
+			doc:name="Input Filepath" />
+		<file:outbound-endpoint path="#[server.userHome+server.fileSeparator+'Middleware-Ordenes']"
+			outputPattern="#['compra-' +sessionVars['freezeDateTime']+'.csv']"
 			connector-ref="FileConnector" responseTimeout="10000" doc:name="e-puerto Ordenes" />
 		<scripting:component doc:name="Groovy">
-			<scripting:script engine="Groovy"><![CDATA[sleep(10000);
-new File("/home/mauriciovignale/Middleware-Confirmaciones/compra-"+sessionVars['outputfilepath']+".csv").text]]></scripting:script>
+			<scripting:script engine="Groovy"><![CDATA[
+						sleep(10000);
+						new File(sessionVars['inputfilepath']).text]]></scripting:script>
 		</scripting:component>
 		<object-to-string-transformer doc:name="Object to String" />
 		<splitter expression="#[org.mule.util.StringUtils.split(message.payload, '\n')]"
@@ -188,10 +196,12 @@ new File("/home/mauriciovignale/Middleware-Confirmaciones/compra-"+sessionVars['
 		</message-properties-transformer>
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
-        <response>
-            <object-to-string-transformer doc:name="Object to String"/>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"/>
-        </response>
+		<response>
+			<object-to-string-transformer doc:name="Object to String" />
+			<custom-transformer
+				class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer"
+				doc:name="Java" />
+		</response>
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
