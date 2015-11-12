@@ -42,16 +42,9 @@ public class App {
 
 		ICsvBeanReader beanReader = null;
 		ICsvBeanWriter beanWriter = null;
-		if (OS.indexOf("win") >= 0) {
-			// para los que corran en WIN no se les rompa nada
-			folderOrderPath = "C:\\Midddleware-Ordenes";
-			folderConfirmPath = "C:\\Midddleware-Confirmaciones";
-			folderCancelPath = "C:\\Midddleware-Cancelaciones";
-		} else {
-			folderOrderPath = System.getProperty("user.home") + File.separator + "Middleware-Ordenes";
-			folderConfirmPath = System.getProperty("user.home") + File.separator + "Middleware-Confirmaciones";
-			folderCancelPath = System.getProperty("user.home") + File.separator + "Middleware-Cancelaciones";
-		}
+		folderOrderPath = System.getProperty("user.home") + File.separator + "Middleware-Ordenes";
+		folderConfirmPath = System.getProperty("user.home") + File.separator + "Middleware-Confirmaciones";
+		folderCancelPath = System.getProperty("user.home") + File.separator + "Middleware-Cancelaciones";
 		// ORDER POLLING
 		Path myDir = Paths.get(folderOrderPath);
 		final CellProcessor[] processors = CSVUtils.getOrderProcessors();
@@ -75,7 +68,7 @@ public class App {
 							beanReader = new CsvBeanReader(
 									new FileReader(folderOrderPath + File.separator + event.context().toString()),
 									CsvPreference.STANDARD_PREFERENCE);
-							
+
 							Thread.sleep(3000);
 							Order order;
 							final String[] header = beanReader.getHeader(true);
