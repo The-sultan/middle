@@ -54,6 +54,10 @@ public class App {
 		}
 		// ORDER POLLING
 		Path myDir = Paths.get(folderOrderPath);
+		final CellProcessor[] processors = CSVUtils.getOrderProcessors();
+		final CellProcessor[] confirmProcessors = CSVUtils.getConfirmProcessors();
+		final String[] headerConfirm = CSVUtils.getCSVConfirmHeaders();
+		final String[] header = CSVUtils.getCSVOrderHeaders();
 		try {
 			WatchService watcher = myDir.getFileSystem().newWatchService();
 			myDir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
@@ -72,8 +76,7 @@ public class App {
 							beanReader = new CsvBeanReader(
 									new FileReader(folderOrderPath + File.separator + event.context().toString()),
 									CsvPreference.STANDARD_PREFERENCE);
-							final String[] header = beanReader.getHeader(true);
-							final CellProcessor[] processors = CSVUtils.getOrderProcessors();
+							
 
 							Order order;
 							while ((order = beanReader.read(Order.class, header, processors)) != null) {
@@ -88,12 +91,12 @@ public class App {
 													folderConfirmPath + File.separator + event.context().toString()),
 											CsvPreference.STANDARD_PREFERENCE);
 
-									final CellProcessor[] confirmProcessors = CSVUtils.getConfirmProcessors();
-									final String[] headerConfirm = CSVUtils.getCSVConfirmHeaders();
-
 									beanWriter.writeHeader(headerConfirm);
 
 									beanWriter.write(res, headerConfirm, confirmProcessors);
+								} catch (Exception e) {
+									System.out.println("WRITER: " + e.toString());
+
 								} finally {
 									if (beanWriter != null) {
 										beanWriter.close();
@@ -103,6 +106,9 @@ public class App {
 								System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s",
 										beanReader.getLineNumber(), beanReader.getRowNumber(), order));
 							}
+
+						} catch (Exception e) {
+							System.out.println("READER: " + e.toString());
 
 						} finally {
 							if (beanReader != null) {
