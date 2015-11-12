@@ -57,7 +57,6 @@ public class App {
 		final CellProcessor[] processors = CSVUtils.getOrderProcessors();
 		final CellProcessor[] confirmProcessors = CSVUtils.getConfirmProcessors();
 		final String[] headerConfirm = CSVUtils.getCSVConfirmHeaders();
-		final String[] header = CSVUtils.getCSVOrderHeaders();
 		try {
 			WatchService watcher = myDir.getFileSystem().newWatchService();
 			myDir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
@@ -77,8 +76,10 @@ public class App {
 									new FileReader(folderOrderPath + File.separator + event.context().toString()),
 									CsvPreference.STANDARD_PREFERENCE);
 							
-
+							Thread.sleep(3000);
 							Order order;
+							final String[] header = beanReader.getHeader(true);
+
 							while ((order = beanReader.read(Order.class, header, processors)) != null) {
 								OrderResult res = new OrderResult();
 								res.setIdentificadorCompra(order.getIdentificadorCompra());
