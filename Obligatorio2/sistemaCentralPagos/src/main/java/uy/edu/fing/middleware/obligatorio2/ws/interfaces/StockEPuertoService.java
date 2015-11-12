@@ -1,5 +1,7 @@
 package uy.edu.fing.middleware.obligatorio2.ws.interfaces;
 
+import java.util.List;
+
 import javax.jws.WebService;
 
 import uy.edu.fing.middleware.obligatorio2.domain.ReservaEPuerto;
@@ -8,6 +10,6 @@ import uy.edu.fing.middleware.obligatorio2.domain.ReservaEPuerto;
 //@Addressing(enabled=true,required=true)
 public interface StockEPuertoService {
 	
-	public void stock(ReservaEPuerto item);
+	public List<String> stock(ReservaEPuerto item);
 
 }

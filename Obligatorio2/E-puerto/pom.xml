@@ -42,8 +42,16 @@
 
 	</dependencies>
 	<build>
-		<finalName>spring-batch</finalName>
+		<finalName>e-puerto</finalName>
 		<plugins>
+			<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.2.1</version>
+            <configuration>
+                <mainClass>com.middleware.fing.App</mainClass>
+            </configuration>
+        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
