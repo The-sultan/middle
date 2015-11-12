@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:core="http://www.mulesoft.org/schema/mule/core"
+    xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" 
 	xmlns:json="http://www.mulesoft.org/schema/mule/json"
 	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
@@ -11,18 +12,17 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
-	xsi:schemaLocation="
-		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-		http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-		http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-		http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
-		http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
-		http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
-		http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
-		http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
-		http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-		http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd"">
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 
 	<configuration doc:name="Configuration">
 		<http:config useTransportForUris="false" />
@@ -46,9 +46,13 @@
 		autoDelete="true" streaming="true" validateConnections="true"
 		doc:name="File" workFileNamePattern="test.csv" />
 
+    <file:connector name="FileConnector-Output" doc:name="File"/>
 
-
-	<flow name="ReservaPedido-Stock">
+    <jms:activemq-connector name="Active_MQ" validateConnections="true" durable="true" persistentDelivery="true" doc:name="Active MQ" clientId="Amazonia"  specification="1.1" brokerURL="tcp://localhost:61616"/>
+    
+    <file:endpoint path="${anulaciones.path}" outputPattern="anulacion_#[message:id]_#[function:datestamp:YYYYMMdd_hhmmss_sss].csv" connector-ref="FileConnector-Output" name="FileOutput" doc:name="FileOuput-AnulacionPedido" responseTimeout="10000"/>
+    
+    <flow name="ReservaPedido-Stock">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockAmazonia" doc:name="HTTP" />
 		<!-- <logger message=".#[message.inboundProperties.'http.request.path']" -->
@@ -60,11 +64,10 @@
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
 		</message-properties-transformer>
-		<response>
-			<custom-transformer
-				class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer"
-				doc:name="Java" />
-		</response>
+        <response>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
+        </response>
+
 		<custom-transformer
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
 			doc:name="Java" />
@@ -79,8 +82,7 @@
 
 
 	</flow>
-
-	<flow name="AnulacionPedido-Stock">
+    <flow name="AnulacionPedido-Stock">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/anularStockAmazonia" doc:name="HTTP" />
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
@@ -91,11 +93,10 @@
 			doc:name="Message Properties">
 			<delete-message-property key="method" />
 		</message-properties-transformer>
-		<response>
-			<custom-transformer
-				class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer"
-				doc:name="Java" />
-		</response>
+        <response>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
+        </response>
+
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
@@ -104,7 +105,7 @@
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
 	</flow>
-	<flow name="ConfirmacionPedido-ePuerto">
+    <flow name="ConfirmacionPedido-ePuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/logStockAmazonia" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -118,7 +119,7 @@
 		<ws:consumer config-ref="Web_Service_Amazonia" operation="stockLocalLog"
 			doc:name="Web Service Consumer" />
 	</flow>
-	<flow name="ReservaPedido-ePuerto">
+    <flow name="ReservaPedido-ePuerto">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/stockEPuerto" doc:name="HTTP" />
 		<logger message=".#[message.inboundProperties.'http.request.path']"
@@ -155,15 +156,13 @@
 		<object-to-string-transformer doc:name="Object to String" />
 
 	</flow>
-
-	<flow name="flowextra">
+    <flow name="flowextra">
 		<splitter expression="#[StringUtils.split(message.payload, '\n\r')]"
 			doc:name="Splitter" />
 		<expression-transformer expression="#[StringUtils.split(message.payload, ',')]"
 			doc:name="Expression" />
 	</flow>
-
-	<flow name="AnulacionPedido-ePuerto-SOAP">
+    <flow name="AnulacionPedido-ePuerto-SOAP">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/cancelaEPuerto" doc:name="HTTP" />
 
@@ -182,10 +181,10 @@
 		<expression-transformer expression="#['idReserva\n' + payload.idReserva]"
 			doc:name="Expression" />
 		<file:outbound-endpoint
-			path="#[server.userHome+'/Middleware-Cancelaciones']" outputPattern="#['compra-'+message.correlationId+'-' +server.dateTime]"
-			responseTimeout="10000" doc:name="e-puerto Ordenes" />
+			 
+			 doc:name="FileOutput-AnulacionPedido"  ref="FileOutput"/>
 	</flow>
-	<flow name="mulePagosYa">
+    <flow name="mulePagosYa">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/pagosYa" doc:name="HTTP" />
 		<cxf:jaxws-service doc:name="CXF-Service2"
@@ -201,12 +200,11 @@
 		</message-properties-transformer>
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
-		<response>
-			<object-to-string-transformer doc:name="Object to String" />
-			<custom-transformer
-				class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer"
-				doc:name="Java" />
-		</response>
+        <response>
+            <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"></custom-transformer>
+        </response>
+
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
@@ -214,13 +212,11 @@
 
 	</flow>
 
-    <jms:activemq-connector name="Active_MQ" validateConnections="true" durable="true" persistentDelivery="true" doc:name="Active MQ" clientId="Amazonia"  specification="1.1" brokerURL="tcp://localhost:61616"/>
-
     <flow name="AnulacionPedido-ePuerto-JMS" initialState="started" tracking:enable-default-events="true">
         <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="ePuerto" doc:name="JMS-AnulacionPedido" />
-        <logger message="Anulacion recibida" level="INFO" doc:name="Logger"/>
-        <byte-array-to-object-transformer returnClass="java.lang.String" ignoreBadInput="true" metadata:id="7019270b-827f-41e3-b044-afd740b8f795" doc:name="Byte Array to Object"/>
-        <file:outbound-endpoint path="#[server.userHome+'/Middleware-Cancelaciones']" outputPattern="#['anulacion-'+message.correlationId+'-' +server.dateTime]" responseTimeout="10000" doc:name="File"/>
+        <logger message="Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
+
+        <file:outbound-endpoint    doc:name="FileOutput-AnulacionPedido" ref="FileOutput"/>
     </flow>
     
 </mule>
