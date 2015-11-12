@@ -151,6 +151,20 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-jms</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+	        <groupId>org.apache.activemq</groupId>
+	        <artifactId>activemq-all</artifactId>
+	        <version>5.7.0</version>
+<!-- 	        <scope>provided</scope> -->
+        </dependency>
+        
     </dependencies>
 
 	<repositories>
