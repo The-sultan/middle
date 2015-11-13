@@ -65,8 +65,9 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			<delete-message-property key="method" />
 		</message-properties-transformer>
         <response>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"/>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 		<custom-transformer
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
 			doc:name="Java" />
@@ -81,7 +82,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 
 
 	</flow>
-    <flow name="AnulacionPedido-Stock">
+    <flow name="AnulacionPedido-Stock-SOAP">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/anularStockAmazonia" doc:name="HTTP" />
 		<cxf:jaxws-service doc:name="CXF-STOCKService"
@@ -93,8 +94,9 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			<delete-message-property key="method" />
 		</message-properties-transformer>
         <response>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"/>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
@@ -193,9 +195,10 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
         <response>
-            <object-to-string-transformer doc:name="Object to String"/>
-            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"/>
+            <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
@@ -205,9 +208,27 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 
     <flow name="AnulacionPedido-ePuerto-JMS" initialState="started" tracking:enable-default-events="true">
         <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="ePuerto" doc:name="JMS-AnulacionPedido" />
-        <logger message="Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
-
-        <file:outbound-endpoint    doc:name="FileOutput-AnulacionPedido" ref="FileOutput"/>
+        <logger message="ePuerto: Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
+        <file:outbound-endpoint doc:name="FileOutput-AnulacionPedido" ref="FileOutput"/>
     </flow>
     
+    <flow name="AnulacionPedido-Stock-JMS" initialState="started" tracking:enable-default-events="true">
+        <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="Stock" doc:name="JMS-AnulacionPedido" />
+        <logger message="Stock: Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
+        <response>
+            <logger level="INFO" doc:name="Logger"></logger>
+        </response>
+        <response>
+            <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
+        </response>
+        <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.StringToLongTransformer" doc:name="StringToLong"/>
+
+		<cxf:jaxws-client
+			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
+			operation="anularReserva" doc:name="CXF"
+			serviceClass="uy.edu.fing.middleware.generated.amazonia.StockLocal" />
+		<outbound-endpoint exchange-pattern="request-response"
+			address="http://localhost:8080/stockLocal/services/stock_local"
+			doc:name="Generic" />
+    </flow>
 </mule>
