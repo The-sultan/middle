@@ -12,6 +12,8 @@ public class PagosYaRestServiceImpl implements PagosYaRestService{
 	@Override
 	public Response addPagos(DatoEntrada pago) {
 		try{
+            if(pago.getNroTarjeta().equals("666"))
+                throw new RuntimeException("Tarjeta invalida");
 			System.out.println("Nuevo Pago " + pago);
 			Long idTrans = Calendar.getInstance().getTimeInMillis();
 			System.out.println("Id Transaccion " + idTrans);
