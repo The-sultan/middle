@@ -3,3 +3,7 @@
 **/.settings/*
 **/target/*
 **/.*
+/Obligatorio2/E-puerto/target/
+/Obligatorio2/sistemaOrquestacion/target/
+**/generated/*
+/Obligatorio2/pagosYA/target/
