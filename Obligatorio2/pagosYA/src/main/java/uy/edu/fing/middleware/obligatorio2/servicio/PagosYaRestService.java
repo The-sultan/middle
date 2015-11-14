@@ -14,6 +14,8 @@ import uy.edu.fing.middleware.obligatorio2.domain.DatoEntrada;
 
 @Path("/")
 @WebService(name="pagosYaService")
+@org.apache.cxf.interceptor.InInterceptors (interceptors = {"org.apache.cxf.interceptor.LoggingInInterceptor" })
+@org.apache.cxf.interceptor.OutInterceptors (interceptors = {"org.apache.cxf.interceptor.LoggingOutInterceptor" })
 public interface PagosYaRestService {
 	
 	@POST
