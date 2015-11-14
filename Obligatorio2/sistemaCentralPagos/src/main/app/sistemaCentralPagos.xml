@@ -40,11 +40,11 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		serviceAddress="http://localhost:8080/stockLocal/services/stock_local"
 		doc:name="Web Service Consumer" />
 	<file:connector name="FileConnector" outputPattern="#[server.dateTime]"
-		writeToDirectory="#[server.userHome+server.fileSeparator+'Middleware-Ordenes']"
-		readFromDirectory="#[server.userHome+server.fileSeparator+'Middleware-Confirmaciones']"
-		workDirectory="#[server.userHome+server.fileSeparator+'Middleware-Logs']"
+		writeToDirectory="C:\outputMiddleware\ordenes"
+		readFromDirectory="C:\outputMiddleware\confirmaciones"
+		
 		autoDelete="true" streaming="true" validateConnections="true"
-		doc:name="File" workFileNamePattern="test.csv" />
+		doc:name="File"  />
 
     <file:connector name="FileConnector-Output" doc:name="File"/>
 
@@ -67,6 +67,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 
 		<custom-transformer
 			class="uy.edu.middleware.obligatorio2.transformers.ItemToReservaProductoTransformer"
@@ -96,6 +97,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
@@ -133,12 +135,12 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			expression="#['identificadorCompra,identificadorProducto,cantidad\r\n' + payload.idCompra+','+payload.idProducto+','+payload.cantidad ]"
 			doc:name="Expression" />
 		<set-session-variable variableName="freezeDateTime"
-			value="#[server.dateTime]" doc:name="Store Date Time" />
+			value="#[server.dateTime.format('yyyy.MM.dd G \'at\' HH_mm_ss')]" doc:name="Store Date Time" />
 		<set-session-variable variableName="inputfilepath"
-			value="#[server.userHome+server.fileSeparator+'Middleware-Confirmaciones'+server.fileSeparator+'compra-'+sessionVars['freezeDateTime']+'.csv']"
+			value="#['C:\\outputMiddleware\\confirmaciones\\'+'compra-'+sessionVars['freezeDateTime']+'.csv']"
 			doc:name="Input Filepath" />
 		<file:outbound-endpoint
-			path="#[server.userHome+server.fileSeparator+'Middleware-Ordenes']"
+			path="C:\outputMiddleware\ordenes2"
 			outputPattern="#['compra-' +sessionVars['freezeDateTime']+'.csv']"
 			connector-ref="FileConnector" responseTimeout="10000" doc:name="e-puerto Ordenes" />
 		<scripting:component doc:name="Groovy">
@@ -147,7 +149,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 						new File(sessionVars['inputfilepath']).text]]></scripting:script>
 		</scripting:component>
 		<object-to-string-transformer doc:name="Object to String" />
-		<splitter expression="#[org.mule.util.StringUtils.removeStart(message.payload, 'identificadorCompra,identificadorReserva,codigo,descripcion\r\n')]"
+		<expression-transformer expression="#[org.mule.util.StringUtils.removeStart(message.payload, 'identificadorCompra,identificadorReserva,codigo,descripcion\r\n')]"
 			doc:name="Splitter" />
 		<expression-transformer
 			expression="#[org.mule.util.StringUtils.split(message.payload, ',')]"
@@ -199,6 +201,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.PagoResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
 
+
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
@@ -221,6 +224,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
         <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.StringToLongTransformer" doc:name="StringToLong"/>
 
 		<cxf:jaxws-client

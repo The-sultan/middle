@@ -42,9 +42,9 @@ public class App {
 
 		ICsvBeanReader beanReader = null;
 		ICsvBeanWriter beanWriter = null;
-		folderOrderPath = System.getProperty("user.home") + File.separator + "Middleware-Ordenes";
-		folderConfirmPath = System.getProperty("user.home") + File.separator + "Middleware-Confirmaciones";
-		folderCancelPath = System.getProperty("user.home") + File.separator + "Middleware-Cancelaciones";
+		folderOrderPath = "C:\\outputMiddleware\\ordenes";
+		folderConfirmPath = "C:\\outputMiddleware\\confirmaciones";
+		folderCancelPath = "C:\\outputMiddleware\\cancelaciones";
 		// ORDER POLLING
 		Path myDir = Paths.get(folderOrderPath);
 		final CellProcessor[] processors = CSVUtils.getOrderProcessors();
