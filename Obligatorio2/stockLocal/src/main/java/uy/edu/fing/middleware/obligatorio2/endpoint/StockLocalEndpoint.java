@@ -25,7 +25,12 @@ public class StockLocalEndpoint implements StockLocal{
 	public @WebResult(name="reservaProductosResponse") DatoSalida reservaProductos(@WebParam (name = "reservaProductosRequest" ) @XmlElement(required=true) List<DatoReserva> productos) throws Exception {
 		System.out.println("Reservar Productos");
 		DatoSalida ret  = new DatoSalida();
-        ret.setCodigo("CODIGO!");
+        if(productos.get(0).getIdProducto().equals(5L)){
+            ret.setCodigo("Error");
+        }
+        else{
+            ret.setCodigo("OK");
+        }
 		ret.setDescripcion("test");
         ret.setIdReserva(1234L);
 		
