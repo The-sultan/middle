@@ -46,11 +46,13 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		autoDelete="true" streaming="true" validateConnections="true"
 		doc:name="File"  />
 
-    <file:connector name="FileConnector-Output" doc:name="File"/>
+    <file:connector name="FileConnector-AnulacionesPedidos" doc:name="File" autoDelete="true" streaming="true" validateConnections="true"/>
 
     <jms:activemq-connector name="Active_MQ" validateConnections="true" durable="true" persistentDelivery="true" doc:name="Active MQ" clientId="Amazonia"  specification="1.1" brokerURL="tcp://localhost:61616"/>
     
-    <file:endpoint path="${anulaciones.path}" outputPattern="anulacion_#[message:id]_#[function:datestamp:YYYYMMdd_hhmmss_sss].csv" connector-ref="FileConnector-Output" name="FileOutput" doc:name="FileOuput-AnulacionPedido" responseTimeout="10000"/>
+<!--     <file:endpoint path="${anulaciones.path}" outputPattern="anulacion_#[message:id]_#[function:datestamp:YYYYMMdd_hhmmss_sss].csv" connector-ref="FileConnector-AnulacionesPedidos" name="FileEndpoint-AnulacionesPedidos" doc:name="FileEndpoint-AnulacionesPedidos" responseTimeout="10000"/> -->
+
+    <file:endpoint path="C:\outputMiddleware\cancelaciones" outputPattern="anulacion_#[sessionVars['freezeDateTime']].csv" connector-ref="FileConnector-AnulacionesPedidos" name="FileEndpoint-AnulacionesPedidos" doc:name="FileEndpoint-AnulacionesPedidos" responseTimeout="10000"/>
     
     <flow name="ReservaPedido-Stock">
 		<http:listener config-ref="HTTP_Listener_Configuration"
@@ -99,6 +101,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         </response>
 
 
+
 		<cxf:jaxws-client
 			wsdlLocation="http://localhost:8080/stockLocal/services/stock_local?wsdl"
 			operation="anularReserva" doc:name="CXF"
@@ -142,7 +145,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		<file:outbound-endpoint
 			path="C:\outputMiddleware\ordenes2"
 			outputPattern="#['compra-' +sessionVars['freezeDateTime']+'.csv']"
-			connector-ref="FileConnector" responseTimeout="10000" doc:name="e-puerto Ordenes" />
+			connector-ref="FileConnector" responseTimeout="10000" doc:name="FileOutput-RecepcionPedido" />
 		<scripting:component doc:name="Groovy">
 			<scripting:script engine="Groovy"><![CDATA[
 						sleep(5000);
@@ -178,7 +181,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			doc:name="Expression" />
 		<file:outbound-endpoint
 			 
-			 doc:name="FileOutput-AnulacionPedido"  ref="FileOutput"/>
+			 doc:name="FileOutput-AnulacionPedido"  ref="FileEndpoint-AnulacionesPedidos"/>
 	</flow>
     <flow name="mulePagosYa">
 		<http:listener config-ref="HTTP_Listener_Configuration"
@@ -202,6 +205,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         </response>
 
 
+
 		<logger message=".#[message.payload]" level="INFO" doc:name="Logger" />
 		<http:request config-ref="HTTP_Request_Configuration"
 			path="pedidosYa/rest/pagoyaservice" method="POST" doc:name="HTTP" />
@@ -212,7 +216,12 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <flow name="AnulacionPedido-ePuerto-JMS" initialState="started" tracking:enable-default-events="true">
         <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="ePuerto" doc:name="JMS-AnulacionPedido" />
         <logger message="ePuerto: Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
-        <file:outbound-endpoint doc:name="FileOutput-AnulacionPedido" ref="FileOutput"/>
+        <set-session-variable variableName="freezeDateTime"
+			value="#[server.dateTime.format('yyyy.MM.dd G \'at\' HH_mm_ss')]" doc:name="Store Date Time" />
+	    <expression-transformer
+			expression="#['identificadorReserva\r\n' + payload]"
+			doc:name="PayloadFormatter" />
+        <file:outbound-endpoint doc:name="FileOutput-AnulacionPedido" ref="FileEndpoint-AnulacionesPedidos" responseTimeout="10000"/>
     </flow>
     
     <flow name="AnulacionPedido-Stock-JMS" initialState="started" tracking:enable-default-events="true">
@@ -224,6 +233,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
         </response>
+
 
         <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.StringToLongTransformer" doc:name="StringToLong"/>
 
