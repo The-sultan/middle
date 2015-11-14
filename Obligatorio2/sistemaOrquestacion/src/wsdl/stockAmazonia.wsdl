@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="StockAmazoniaServiceService" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" elementFormDefault="unqualified" targetNamespace="http://interfaces.ws.obligatorio2.middleware.fing.edu.uy/" version="1.0">
+
+  <xs:element name="stock" type="tns:stock"/>
+
+  <xs:element name="stockResponse" type="tns:stockResponse"/>
+
+  <xs:complexType name="stock">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:item"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="item">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cantidad" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:long"/>
+      <xs:element minOccurs="0" name="precioUnitario" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="stockResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:amazoniaResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="amazoniaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcion" type="xs:string"/>
+      <xs:element minOccurs="0" name="idReserva" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="stock">
+    <wsdl:part element="tns:stock" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stockResponse">
+    <wsdl:part element="tns:stockResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="StockAmazoniaService">
+    <wsdl:operation name="stock">
+      <wsdl:input message="tns:stock" name="stock">
+    </wsdl:input>
+      <wsdl:output message="tns:stockResponse" name="stockResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="StockAmazoniaServiceServiceSoapBinding" type="tns:StockAmazoniaService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="stock">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="stock">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="stockResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StockAmazoniaServiceService">
+    <wsdl:port binding="tns:StockAmazoniaServiceServiceSoapBinding" name="StockAmazoniaServicePort">
+      <soap:address location="http://localhost:8081/stockAmazonia"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

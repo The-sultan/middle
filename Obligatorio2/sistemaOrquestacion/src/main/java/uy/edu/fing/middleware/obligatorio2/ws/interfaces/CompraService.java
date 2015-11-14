@@ -9,6 +9,6 @@ import uy.edu.fing.middleware.obligatorio2.domain.Orden;
 @Addressing(enabled=true,required=true)
 public interface CompraService {
 	
-	public void compra(Orden orden);
+	public String compra(Orden orden);
 
 }
