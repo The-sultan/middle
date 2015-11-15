@@ -18,7 +18,8 @@ public class ResponseCompraServiceImpl implements ResponseCompraService{
 
 	@Oneway
 	public void callBack(@WebParam(name="return") String callbackMessage){
-		System.out.println("Recieved callback message " + callbackMessage);
+		//System.out.println("Recieved callback message " + callbackMessage);
+		logger.info("Recibimos mensaje callback  " + callbackMessage);
 	}
 	
 	

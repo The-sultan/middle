@@ -9,7 +9,7 @@
 	</appender>
 
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="logs/logger.log" />
+		<param name="file" value="${catalina.home}/logs/ClienteCallback.log"/>
 		<param name="MaxFileSize" value="5MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -18,7 +18,7 @@
 	</appender>
 
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
 	</root>
