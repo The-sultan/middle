@@ -228,7 +228,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <jms:inbound-endpoint topic="anulacion-pedido" connector-ref="Active_MQ" tracking:enable-default-events="true" durableName="Stock" doc:name="JMS-AnulacionPedido" />
         <logger message="Stock: Anulacion recibida: #[payload]" level="INFO" doc:name="Logger"/>
         <response>
-            <logger level="INFO" doc:name="Logger"></logger>
+            <logger message="Stock: Respuesta anulacion: #[payload]" level="INFO" doc:name="Logger"></logger>
         </response>
         <response>
             <custom-transformer class="uy.edu.middleware.obligatorio2.transformers.AnularAmazoniaResponseTransformer" doc:name="Java"></custom-transformer>
@@ -244,5 +244,8 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		<outbound-endpoint exchange-pattern="request-response"
 			address="http://localhost:8080/stockLocal/services/stock_local"
 			doc:name="Generic" />
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="Stock: Error al recibir anulacion: #[payload]" level="WARN" doc:name="Logger"/>
+        </catch-exception-strategy>
     </flow>
 </mule>
